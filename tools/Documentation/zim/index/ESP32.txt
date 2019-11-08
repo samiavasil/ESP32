@@ -1,7 +1,0 @@
-Content-Type: text/x-zim-wiki
-Wiki-Format: zim 0.4
-Creation-Date: 2019-11-06T16:23:09+02:00
-
-====== ESP32 ======
-Created сряда 06 ноември 2019
-
