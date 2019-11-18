@@ -8,6 +8,6 @@ set(EXTRA_COMPONENT_DIRS $ENV{IDF_PATH}/examples/common_components/protocol_exam
 
 set(SUPPORTED_TARGETS esp32)
 include($ENV{IDF_PATH}/tools/cmake/project.cmake)
-project(mqtt_websocket_secure)
+project(mqtt_websocket_exteded)
 
-target_add_binary_data(mqtt_websocket_secure.elf "main/mqtt_eclipse_org.pem" TEXT)
+target_add_binary_data(mqtt_websocket_exteded.elf "main/mqtt_eclipse_org.pem" TEXT)
