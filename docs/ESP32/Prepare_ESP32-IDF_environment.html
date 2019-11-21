@@ -6,7 +6,7 @@
 
 	<title>Install esp32-idf</title>
     
-	<meta name="generator" content="Zim 0.68-rc1 & the Ecodiv-responsive template">
+	<meta name="generator" content="Zim 0.65 & the Ecodiv-responsive template">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans:300&subset=latin,greek,latin-ext' rel='stylesheet' type='text/css'>
     <script type='text/javascript' src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.1.1.min.js"></script>
@@ -34,6 +34,7 @@
                     <ul>
 <li><a href="../ESP32.html" title="ESP32" class="page">ESP32</a>
 <ul>
+<li><a href="./ESP-IDF_create_new_project_and_components.html" title="ESP-IDF create new project and components" class="page">ESP-IDF create new project and components</a></li>
 <li><b>Prepare ESP32-IDF environment</b></li>
 </ul></li>
 </ul>
@@ -63,19 +64,20 @@
 This is corespond to the latest version (11.11.2019 --&gt; a45e9985344575a80acb1dc9c12e7bec4d8af401). Follow steps coresspond to this version.
 </p>
 <div class="zim-object">
-<pre><code class="sh">mkdir -p xxx/ESP/
-cd xxx/ESP/
-git clone --recursive https://github.com/espressif/esp-idf.git
-cd esp-idf/
-./install.sh
-. xxx/ESP/esp-idf/export.sh
-cd yyy/
-cp cp -r xxx/esp-idf/examples/protocols/websocket/ ./
-idf.py menuconfig // Configure application
-idf.py build
-idf.py -p PORT [-b BAUD] flash
-idf.py -p /dev/ttyUSB0 monitor
-	</code></pre>
+<pre class="brush: sh;">
+1&nbsp;mkdir -p xxx/ESP/
+2&nbsp;cd xxx/ESP/
+3&nbsp;git clone --recursive https://github.com/espressif/esp-idf.git
+4&nbsp;cd esp-idf/
+5&nbsp;./install.sh
+6&nbsp;. xxx/ESP/esp-idf/export.sh
+7&nbsp;cd yyy/
+8&nbsp;cp cp -r xxx/esp-idf/examples/protocols/websocket/ ./
+9&nbsp;idf.py menuconfig // Configure application
+10&nbsp;idf.py build
+11&nbsp;idf.py -p PORT [-b BAUD] flash
+12&nbsp;idf.py -p /dev/ttyUSB0 monitor
+13&nbsp;	</pre>
 </div>
 
 <h2>Install Eclpise plugins</h2>
@@ -110,7 +112,7 @@ Note: Make sure you run this step even if you've already installed the required 
 
 <p>
 Make sure you are in C/C++ Perspective<br>
-<ul>
+<ul style='padding-left: 30pt'>
 <li>Go to File &gt; New &gt; Espressif IDF Project (If you don't see this, please reset the perspective from Window &gt; Perspective &gt; Reset Perspective..)</li>
 <li>Provide the Project name</li>
 <li>Click Finish</li>
