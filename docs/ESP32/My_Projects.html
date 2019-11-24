@@ -4,7 +4,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-	<title>ESP32-IDF Prepare environment</title>
+	<title>My Projects</title>
     
 	<meta name="generator" content="Zim 0.68-rc1 & the Ecodiv-responsive template">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -34,12 +34,12 @@
                     <ul>
 <li><a href="../ESP32.html" title="ESP32" class="page">ESP32</a>
 <ul>
-<li><b>ESP32-IDF Prepare environment</b>
+<li><a href="./ESP32-IDF_Prepare_environment.html" title="ESP32-IDF Prepare environment" class="page">ESP32-IDF Prepare environment</a></li>
+<li><b>My Projects</b>
 <ul>
-<li><a href="./ESP32-IDF_Prepare_environment/ESP-IDF_Project_and_components.html" title="ESP-IDF Project and components" class="page">ESP-IDF Project and components</a></li>
-</ul>
-</li>
-<li><a href="./My_Projects.html" title="My Projects" class="page">My Projects</a></li>
+<li><a href="./My_Projects/MQTT_based_IOT_network.html" title="MQTT based IOT network" class="page">MQTT based IOT network</a></li>
+<li><a href="./My_Projects/Unify_wifi_libraries.html" title="Unify wifi libraries" class="page">Unify wifi libraries</a></li>
+</ul></li>
 </ul></li>
 </ul>
 
@@ -62,66 +62,10 @@
                 <!-- You may want to replace the image below (but you are welcome to use it if you like) -->
                 <img src="../_resources/header_1.png" width=100% alt="Header">
                 <br>
-                <h1>ESP32-IDF Prepare environment <a name='ESP32:ESP32-IDF Prepare environment'></a></h1>
+                <h1>My Projects <a name='ESP32:My Projects'></a></h1>
                 
-                <h2>Install esp32-idf</h2>
-
-<p>
-This is corespond to the latest version (11.11.2019 --&gt; a45e9985344575a80acb1dc9c12e7bec4d8af401). Follow steps coresspond to this version.
-</p>
-<div class="zim-object">
-<pre><code class="sh">mkdir -p xxx/ESP/
-cd xxx/ESP/
-git clone --recursive https://github.com/espressif/esp-idf.git
-cd esp-idf/
-./install.sh
-. xxx/ESP/esp-idf/export.sh
-cd yyy/
-cp cp -r xxx/esp-idf/examples/protocols/websocket/ ./
-idf.py menuconfig // Configure application
-idf.py build
-idf.py -p PORT [-b BAUD] flash
-idf.py -p /dev/ttyUSB0 monitor
-	</code></pre>
-</div>
-
-<h2>Install Eclpise plugins</h2>
-
-<p>
-Full descriptions can be found here:  "<a href="https://github.com/espressif/idf-eclipse-plugin/blob/master/README.md#GettingStarted" title="Espressif IDF Eclipse Plugins&quot;" class="https">Espressif IDF Eclipse Plugins"</a>
-</p>
-
-<h3>Installing IDF Plugins using update site url</h3>
-
-<p>
-You can install the IDF Eclipse plugins into an existing Eclipse CDT installation using the update site url. You first need to add the release repository url as follows:<br>
-Go to Help -&gt; Install New Software<br>
-Click Add…<br>
-Enter Location of the repository <a href="https://dl.espressif.com/dl/idf-eclipse-plugin/updates/latest/" title="https://dl.espressif.com/dl/idf-eclipse-plugin/updates/latest/" class="https">https://dl.espressif.com/dl/idf-eclipse-plugin/updates/latest/</a><br>
-Enter Name as Espressif IDF Plugins for Eclipse<br>
-Click Ok<br>
-Select Espressif IDF from the list and proceed with the installation
-</p>
-
-<h3>Installing ESP-IDF Tools</h3>
-
-<p>
-ESP-IDF requires some prerequisite tools to be installed so you can build firmware for the ESP32. The prerequisite tools include Python, Git, cross-compilers, menuconfig tool, CMake and Ninja build tools.<br>
-For this getting started follow the instructions below.<br>
-Navigate to Help &gt; Espressif IDF Tools Manager &gt; Install Tools<br>
-Provide the ESP-IDF Directory path to get started with the installation. Check the Console for the installation details. Installation might take a while if you're doing it for the first time since it has to download and install xtensa-esp32-elf, esp32ulp-elf, cmake, openocd-esp32 and ninja tools.<br>
-Note: Make sure you run this step even if you've already installed the required tools, since it sets the IDF_PATH,PATH,OPENOCD_SCRIPTS and IDF_PYTHON_ENV_PATH based on the idf_tools.py export command.
-</p>
-
-<h3>Create a new Project</h3>
-
-<p>
-Make sure you are in C/C++ Perspective<br>
-<ul style='padding-left: 30pt'>
-<li>Go to File &gt; New &gt; Espressif IDF Project (If you don't see this, please reset the perspective from Window &gt; Perspective &gt; Reset Perspective..)</li>
-<li>Provide the Project name</li>
-<li>Click Finish</li>
-</ul>
+                <p>
+Created неделя 24 ноември 2019
 </p>
 
 

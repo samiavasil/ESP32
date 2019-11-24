@@ -6,7 +6,7 @@
 
 	<title>ESP-IDF Project and components</title>
     
-	<meta name="generator" content="Zim 0.65 & the Ecodiv-responsive template">
+	<meta name="generator" content="Zim 0.68-rc1 & the Ecodiv-responsive template">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans:300&subset=latin,greek,latin-ext' rel='stylesheet' type='text/css'>
     <script type='text/javascript' src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.1.1.min.js"></script>
@@ -37,7 +37,9 @@
 <li><a href="../ESP32-IDF_Prepare_environment.html" title="ESP32-IDF Prepare environment" class="page">ESP32-IDF Prepare environment</a>
 <ul>
 <li><b>ESP-IDF Project and components</b></li>
-</ul></li>
+</ul>
+</li>
+<li><a href="../My_Projects.html" title="My Projects" class="page">My Projects</a></li>
 </ul></li>
 </ul>
 
@@ -89,21 +91,20 @@ An example project directory tree might look like this:
 </p>
 
 <div class="zim-object">
-<pre class="brush: haddock;">
-1&nbsp;- myProject/
-2&nbsp;			 - CMakeLists.txt
-3&nbsp;			 - sdkconfig
-4&nbsp;			 - components/ - component1/ - CMakeLists.txt
-5&nbsp;										 - Kconfig
-6&nbsp;										 - src1.c
-7&nbsp;						   - component2/ - CMakeLists.txt
-8&nbsp;										 - Kconfig
-9&nbsp;										 - src1.c
-10&nbsp;										 - include/ - component2.h
-11&nbsp;			 - main/       - CMakeLists.txt
-12&nbsp;						   - src1.c
-13&nbsp;						   - src2.c
-14&nbsp;			 - build/</pre>
+<pre><code class="haddock">- myProject/
+			 - CMakeLists.txt
+			 - sdkconfig
+			 - components/ - component1/ - CMakeLists.txt
+										 - Kconfig
+										 - src1.c
+						   - component2/ - CMakeLists.txt
+										 - Kconfig
+										 - src1.c
+										 - include/ - component2.h
+			 - main/       - CMakeLists.txt
+						   - src1.c
+						   - src2.c
+			 - build/</code></pre>
 </div>
 
 <p>
@@ -137,11 +138,10 @@ Each project has a single top-level CMakeLists.txt file that contains build sett
 <b>Minimal project:</b>
 </p>
 <div class="zim-object">
-<pre class="brush: makefile;">
-1&nbsp;cmake_minimum_required(VERSION 3.5)
-2&nbsp;include($ENV{IDF_PATH}/tools/cmake/project.cmake)
-3&nbsp;project(myProject)
-</pre>
+<pre><code class="makefile">cmake_minimum_required(VERSION 3.5)
+include($ENV{IDF_PATH}/tools/cmake/project.cmake)
+project(myProject)
+</code></pre>
 </div>
 
 <p>
@@ -218,10 +218,9 @@ The minimal component CMakeLists.txt file simply registers the component to the 
 </p>
 
 <div class="zim-object">
-<pre class="brush: makefile;">
-1&nbsp;idf_component_register(SRCS "foo.c" "bar.c"
-2&nbsp;					   INCLUDE_DIRS "include"
-3&nbsp;					   REQUIRES mbedtls)</pre>
+<pre><code class="makefile">idf_component_register(SRCS "foo.c" "bar.c"
+					   INCLUDE_DIRS "include"
+					   REQUIRES mbedtls)</code></pre>
 </div>
 
 <p>
@@ -301,8 +300,7 @@ To pass compiler options when compiling source files belonging to a particular c
 </p>
 
 <div class="zim-object">
-<pre class="brush: makefile;">
-1&nbsp;target_compile_options(${COMPONENT_LIB} PRIVATE -Wno-unused-variable)</pre>
+<pre><code class="makefile">target_compile_options(${COMPONENT_LIB} PRIVATE -Wno-unused-variable)</code></pre>
 </div>
 
 <p>
@@ -310,11 +308,10 @@ To apply the compilation flags to a single source file, use the CMake set_source
 </p>
 
 <div class="zim-object">
-<pre class="brush: makefile;">
-1&nbsp;set_source_files_properties(mysrc.c
-2&nbsp;	PROPERTIES COMPILE_FLAGS
-3&nbsp;	-Wno-unused-variable
-4&nbsp;)</pre>
+<pre><code class="makefile">set_source_files_properties(mysrc.c
+	PROPERTIES COMPILE_FLAGS
+	-Wno-unused-variable
+)</code></pre>
 </div>
 
 <p>
@@ -351,25 +348,23 @@ The configuration system can be used to conditionally compile some files dependi
 <b>Kconfig:</b>
 </p>
 <div class="zim-object">
-<pre class="brush: makefile;">
-1&nbsp;config FOO_ENABLE_BAR
-2&nbsp;	bool "Enable the BAR feature."
-3&nbsp;	help
-4&nbsp;		This enables the BAR feature of the FOO component.</pre>
+<pre><code class="makefile">config FOO_ENABLE_BAR
+	bool "Enable the BAR feature."
+	help
+		This enables the BAR feature of the FOO component.</code></pre>
 </div>
 
 <p>
 <b>CMakeLists.txt:</b>
 </p>
 <div class="zim-object">
-<pre class="brush: makefile;">
-1&nbsp; set(srcs "foo.c" "more_foo.c")
-2&nbsp;
-3&nbsp; if(CONFIG_FOO_ENABLE_BAR)
-4&nbsp;	 list(APPEND srcs "bar.c")
-5&nbsp; endif()
-6&nbsp;
-7&nbsp;idf_component_register(SRCS "${srcs}"    ...)</pre>
+<pre><code class="makefile"> set(srcs "foo.c" "more_foo.c")
+
+ if(CONFIG_FOO_ENABLE_BAR)
+	 list(APPEND srcs "bar.c")
+ endif()
+
+idf_component_register(SRCS "${srcs}"    ...)</code></pre>
 </div>
 
 <p>
@@ -384,42 +379,40 @@ This can also be used to select or stub out an implementation, as such:
 <b>Kconfig:</b>
 </p>
 <div class="zim-object">
-<pre class="brush: makefile;">
-1&nbsp;config ENABLE_LCD_OUTPUT
-2&nbsp;	bool "Enable LCD output."
-3&nbsp;	help
-4&nbsp;		Select this if your board has a LCD.
-5&nbsp;
-6&nbsp;config ENABLE_LCD_CONSOLE
-7&nbsp;	bool "Output console text to LCD"
-8&nbsp;	depends on ENABLE_LCD_OUTPUT
-9&nbsp;	help
-10&nbsp;		Select this to output debugging output to the lcd
-11&nbsp;
-12&nbsp;config ENABLE_LCD_PLOT
-13&nbsp;	bool "Output temperature plots to LCD"
-14&nbsp;	depends on ENABLE_LCD_OUTPUT
-15&nbsp;	help
-16&nbsp;		Select this to output temperature plots</pre>
+<pre><code class="makefile">config ENABLE_LCD_OUTPUT
+	bool "Enable LCD output."
+	help
+		Select this if your board has a LCD.
+
+config ENABLE_LCD_CONSOLE
+	bool "Output console text to LCD"
+	depends on ENABLE_LCD_OUTPUT
+	help
+		Select this to output debugging output to the lcd
+
+config ENABLE_LCD_PLOT
+	bool "Output temperature plots to LCD"
+	depends on ENABLE_LCD_OUTPUT
+	help
+		Select this to output temperature plots</code></pre>
 </div>
 
 <p>
 <b>CMakeLists.txt:</b>
 </p>
 <div class="zim-object">
-<pre class="brush: makefile;">
-1&nbsp;if(CONFIG_ENABLE_LCD_OUTPUT)
-2&nbsp;   set(srcs lcd-real.c lcd-spi.c)
-3&nbsp;else()
-4&nbsp;   set(srcs lcd-dummy.c)
-5&nbsp;endif()
-6&nbsp;
-7&nbsp;# We need font if either console or plot is enabled
-8&nbsp;if(CONFIG_ENABLE_LCD_CONSOLE OR CONFIG_ENABLE_LCD_PLOT)
-9&nbsp;   list(APPEND srcs "font.c")
-10&nbsp;endif()
-11&nbsp;
-12&nbsp;idf_component_register(SRCS "${srcs}"   ...)</pre>
+<pre><code class="makefile">if(CONFIG_ENABLE_LCD_OUTPUT)
+   set(srcs lcd-real.c lcd-spi.c)
+else()
+   set(srcs lcd-dummy.c)
+endif()
+
+# We need font if either console or plot is enabled
+if(CONFIG_ENABLE_LCD_CONSOLE OR CONFIG_ENABLE_LCD_PLOT)
+   list(APPEND srcs "font.c")
+endif()
+
+idf_component_register(SRCS "${srcs}"   ...)</code></pre>
 </div>
 
 <h3>Preprocessor Definitions</h3>
@@ -444,10 +437,9 @@ When compiling each component, the ESP-IDF build system recursively evaluates it
 <h3>When writing a component</h3>
 
 <div class="zim-object">
-<pre class="brush: makefile;">
-1&nbsp;idf_component_register(...
-2&nbsp;					   REQUIRES mbedtls
-3&nbsp;					   PRIV_REQUIRES console spiffs)</pre>
+<pre><code class="makefile">idf_component_register(...
+					   REQUIRES mbedtls
+					   PRIV_REQUIRES console spiffs)</code></pre>
 </div>
 
 <p>

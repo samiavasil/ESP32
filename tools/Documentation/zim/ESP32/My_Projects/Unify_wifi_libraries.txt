@@ -1,0 +1,12 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2019-11-24T14:40:19+02:00
+
+====== Unify wifi libraries ======
+Created неделя 24 ноември 2019
+
+===== Information =====
+The idea is to create a wrapper library for WiFI connectivity, with a common configuration for all connection types (WEP, WPA, WPA enterprice, etc.).
+It should be possible to configure it at build time (via menuconfig), but it must be able to switch between different connection types at runtime.
+The library should maintain wifi smart configuration whenever possible.
+
