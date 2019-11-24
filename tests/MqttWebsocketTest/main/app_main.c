@@ -16,7 +16,7 @@
 #include "nvs_flash.h"
 #include "esp_event.h"
 #include "tcpip_adapter.h"
-#include "protocol_examples_common.h"
+//#include "protocol_examples_common.h"
 
 #include "freertos/event_groups.h"
 #include "freertos/FreeRTOS.h"
