@@ -75,7 +75,7 @@ The inclusion of these three lines, in the order shown above, is necessary for e
 **Optional Project Variables**
 These variables all have default values that can be overridden for custom behaviour. Look in /tools/cmake/project.cmake for all of the implementation details.
 
-	* **COMPONENT_DIRS, COMPONENTS_DIRS**: Directories to search for components. Defaults to IDF_PATH/components, PROJECT_DIR/components, and **EXTRA_COMPONENT_DIRS**. Override this variable if you don’t want to search for components in these places.
+	* **COMPONENT_DIRS, COMPONENTS_DIRS**: Directories to search for components. Defaults to IDF_PATH/components, PROJECT_DIR/components, and **EXTRA_COMPONENT_DIRS**. Override this variable if you don’t want to search for components in these places. 			
 	* **EXTRA_COMPONENT_DIRS, EXTRA_COMPONENTS_DIRS**: Optional list of additional directories to search for components. Paths can be relative to the project directory, or absolute.
 	* **COMPONENTS**: A list of component names to build into the project. Defaults to all components found in the **COMPONENT_DIRS** directories. Use this variable to “trim down” the project for faster build times. Note that any component which “requires” another component via the REQUIRES or PRIV_REQUIRES arguments on component registration will automatically have it added to this list, so the COMPONENTS list can be very short.
 
