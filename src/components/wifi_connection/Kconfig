@@ -6,89 +6,103 @@ menu "Wi-Fi Connector Manager"
             bool "WPA"
         config WIFI_CON_METHOD_WPA_ENT
             bool "WPA_ENT"
-        config WIFI_CON_EAP_METHOD_WFS
-            bool "WFS"
+        config WIFI_CON_EAP_METHOD_WPS
+            bool "WPS"
     endchoice
-
-config EXAMPLE_WIFI_SSID
-        string "WiFi SSID. FIX ME !!!!"
-        default "wpa2_test"
-        help
-            SSID (network name) for the example to connect to.
-
-    
-if WIFI_CON_METHOD_WPA
+ 
     config ESP_WIFI_SSID
         string "WiFi SSID"
         default "myssid"
         help
-            SSID (network name) for the example to connect to.
-
+            SSID (network name) for the WIFICON to connect to.
+    
+if WIFI_CON_METHOD_WPA
     config ESP_WIFI_PASSWORD
         string "WiFi Password"
         default "mypassword"
         help
-            WiFi password (WPA or WPA2) for the example to use.
+            WiFi password (WPA or WPA2) for the WIFICON to use.
 endif
 
 if WIFI_CON_METHOD_WPA_ENT
 
-    config EXAMPLE_VALIDATE_SERVER_CERT
+    config WIFICON_VALIDATE_SERVER_CERT
         bool "Validate server"
         default n
         help
             Validate the servers' certificate using CA cert.
+if WIFICON_VALIDATE_SERVER_CERT
+    config WIFICON_VALIDATE_SERVER_CERT_NAME
+        string "Validate server CA"
+        default "wpa2_ca.pem"
+        help
+            Validate the servers via certificate using CA.
+endif
 
     choice
-        prompt "EAP method for the example to use"
-        default EXAMPLE_EAP_METHOD_PEAP
-        config EXAMPLE_EAP_METHOD_TLS
+        prompt "EAP method to use"
+        default WIFICON_EAP_METHOD_PEAP
+        config WIFICON_EAP_METHOD_TLS
             bool "TLS"
-        config EXAMPLE_EAP_METHOD_PEAP
+        config WIFICON_EAP_METHOD_PEAP
             bool "PEAP"
-        config EXAMPLE_EAP_METHOD_TTLS
+        config WIFICON_EAP_METHOD_TTLS
             bool "TTLS"
     endchoice
 
-    config EXAMPLE_EAP_METHOD
+    config WIFICON_EAP_METHOD
         int
-        default 0 if EXAMPLE_EAP_METHOD_TLS
-        default 1 if EXAMPLE_EAP_METHOD_PEAP
-        default 2 if EXAMPLE_EAP_METHOD_TTLS
+        default 0 if WIFICON_EAP_METHOD_TLS
+        default 1 if WIFICON_EAP_METHOD_PEAP
+        default 2 if WIFICON_EAP_METHOD_TTLS
 
-    config EXAMPLE_EAP_ID
+    config WIFICON_EAP_ID
         string "EAP ID"
-        default "example@espressif.com"
+        default "WIFICON@espressif.com"
         help
             Identity in phase 1 of EAP procedure.
 
-    config EXAMPLE_EAP_USERNAME
+    config  WIFICON_EAP_METHOD_TLS_CERT_NAME
+            string "EAP TLS CERTIFICATE"
+        depends on WIFICON_EAP_METHOD_TLS
+        default "wpa2_client.crt"
+        help
+            Certificate for EAP method (TLS).
+    
+    config  WIFICON_EAP_METHOD_TLS_KEY_NAME
+            string "EAP TLS KEY"
+        depends on WIFICON_EAP_METHOD_TLS
+        default "wpa2_client.key"
+        help
+            Key for EAP method (TLS).     
+
+    config WIFICON_EAP_USERNAME
         string "EAP USERNAME"
-        depends on EXAMPLE_EAP_METHOD_PEAP || EXAMPLE_EAP_METHOD_TTLS
+        depends on WIFICON_EAP_METHOD_PEAP || WIFICON_EAP_METHOD_TTLS
         default "espressif"
         help
             Username for EAP method (PEAP and TTLS).
 
-    config EXAMPLE_EAP_PASSWORD
+    config WIFICON_EAP_PASSWORD
         string "EAP PASSWORD"
-        depends on EXAMPLE_EAP_METHOD_PEAP || EXAMPLE_EAP_METHOD_TTLS
+        depends on WIFICON_EAP_METHOD_PEAP || WIFICON_EAP_METHOD_TTLS
         default "test11"
         help
             Password for EAP method (PEAP and TTLS).
 endif
 
-if WIFI_CON_EAP_METHOD_WFS
-    choice EXAMPLE_WPS_TYPE
+if WIFI_CON_EAP_METHOD_WPS
+    choice WIFICON_WPS_TYPE
         prompt "WPS mode"
-        default EXAMPLE_WPS_TYPE_PBC
+        default WIFICON_WPS_TYPE_PBC
         help
             WPS type for the esp32 to use.
 
-        config EXAMPLE_WPS_TYPE_PBC
+        config WIFICON_WPS_TYPE_PBC
             bool "PBC"
-        config EXAMPLE_WPS_TYPE_PIN
+        config WIFICON_WPS_TYPE_PIN
             bool "PIN"
-        config EXAMPLE_WPS_TYPE_DISABLE
+        config WIFICON_WPS_TYPE_DISABLE
             bool "disable"
     endchoice
 endif	
