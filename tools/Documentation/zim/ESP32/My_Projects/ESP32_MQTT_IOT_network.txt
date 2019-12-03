@@ -2,6 +2,7 @@ Content-Type: text/x-zim-wiki
 Wiki-Format: zim 0.4
 Creation-Date: 2019-11-24T23:22:08+02:00
 
-====== MQTT based IOT network ======
+====== ESP32 MQTT IOT network ======
 Created неделя 24 ноември 2019
 
+=== ESP32 Mqtt client ===

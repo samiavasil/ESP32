@@ -1,0 +1,64 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2019-12-03T17:27:15+02:00
+
+====== Work ======
+Created вторник 03 декември 2019
+
+
+
+=== MQTT Tools ===
+
+1. MQTT clients
+	* [[http://www.hivemq.com/demos/websocket-client/|HIVEMQ Websockets Client Showcase]]
+	* [[https://github.com/eclipse/paho.mqtt-spy|MQTT-Spy]]
+	* [[http://workswithweb.com/mqttbox.html|MQTTBox]]
+	
+2. ESP32
+
+
+=== MQTT Test Servers: ===
+
+http://mqtt.eclipse.org/       http://www.mqtt-dashboard.com/
+Tested with: [[https://github.com/eclipse/paho.mqtt-spy|MQTT-Spy,]] [[ESP32 MQTT IOT network|ESP32 Mqtt client]]
+Server CA works with Certificate: [[./mqtt_eclipse_org.pem|mqtt_eclipse_org.pem]] 
+{{{code: lang="sh" linenumbers="True"
+tcp -> mqtt://mqtt.eclipse.org
+ssl -> mqtts://mqtt.eclipse.org:8883
+ws  -> ws://mqtt.eclipse.org:80/mqtt
+wss -> wss://mqtt.eclipse.org:443/mqtt
+}}}
+
+ 
+
+https://www.hivemq.com/public-mqtt-broker/
+{{{code: lang="sh" linenumbers="True"
+Tested with:
+tcp: 1883
+ws: 8000
+MQTT-Spy, tcp, ws 
+MQTTBox   tcp
+}}}
+
+
+
+test.mosquitto.org:1883        https://test.mosquitto.org/  
+Tested with: [[https://github.com/eclipse/paho.mqtt-spy|MQTT-Spy]] tcp, ssl , ws, wss
+Server CA works with Certificate: [[./mosquitto.org.crt]] 
+{{{code: lang="sh" linenumbers="True"
+The server listens on the following ports:
+
+	1883 : MQTT, unencrypted
+	8883 : MQTT, encrypted
+	8884 : MQTT, encrypted, client certificate required
+	8080 : MQTT over WebSockets, unencrypted
+	8081 : MQTT over WebSockets, encrypted
+}}}
+
+Good but has an issue with bad RSA (short) keys in CA certificate. 
+Task: Check Alternatives as described here https://github.com/espressif/esp-idf/issues/2993
+
+	iot.eclipse.org
+	cloudmqtt
+
+
