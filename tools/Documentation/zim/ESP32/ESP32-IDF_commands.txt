@@ -1,0 +1,69 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2019-12-26T21:38:40+02:00
+
+====== ESP32-IDF commands ======
+Created четвъртък 26 декември 2019
+
+=== 1 Prepare environment: ===
+{{{code: lang="sh" linenumbers="True"
+source xxx/esp-idf/export.sh
+}}}
+
+
+=== 2 Read flash address range ===
+{{{code: lang="c" linenumbers="True"
+esptool.py -p /dev/ttyUSB0 -b 460800 read_flash 0x9000 0x6000 flash_contents.bin
+}}}
+
+
+=== 3 Erase flash region ===
+{{{code: lang="sh" linenumbers="True"
+esptool.py erase_region 0x9000 0x6000
+}}}
+
+
+
+=== 4 Erase all flash ===
+{{{code: lang="sh" linenumbers="True"
+esptool.py erase_flash
+}}}
+
+
+=== 5 To generate non encrypted NVS partition: ===
+{{{code: lang="sh" linenumbers="True"
+python nvs_partition_gen.py generate sample_singlepage_blob.csv sample.bin 0x3000
+}}}
+
+
+=== 6 To generate only encryption keys: ===
+{{{code: lang="sh" linenumbers="True"
+python nvs_partition_gen.py generate-key
+}}}
+
+
+=== 7 To generate encrypted NVS partition: ===
+**Encrypt by allowing the utility to generate encryption keys:**
+{{{code: lang="sh" linenumbers="True"
+#Encryption key of the following format <outdir>/keys/keys-<timestamp>.bin is created.
+python nvs_partition_gen.py encrypt sample_singlepage_blob.csv sample_encr.bin 0x3000 --keygen
+}}}
+
+
+**Encrypt by allowing the utility to generate encryption keys and store it in provided custom filename**:
+{{{code: lang="sh" linenumbers="True"
+python nvs_partition_gen.py encrypt sample_singlepage_blob.csv sample_encr.bin 0x3000 --keygen --keyfile sample_keys.bin
+}}}
+
+
+**Encrypt by providing the encryption keys as input binary file:**
+{{{code: lang="sh" linenumbers="True"
+python nvs_partition_gen.py encrypt sample_singlepage_blob.csv sample_encr.bin 0x3000 --inputkey sample_keys.bin
+}}}
+
+
+=== 8 To decrypt encrypted NVS partition: ===
+{{{code: lang="sh" linenumbers="True"
+python nvs_partition_gen.py decrypt sample_encr.bin sample_keys.bin sample_decr.bin
+}}}
+

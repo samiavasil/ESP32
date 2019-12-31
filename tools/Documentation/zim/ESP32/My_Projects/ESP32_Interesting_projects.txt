@@ -1,0 +1,8 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2019-12-17T15:17:02+02:00
+
+====== ESP32 Interesting projects ======
+Created вторник 17 декември 2019
+
+[[https://hackaday.com/2018/01/28/esp32-makes-for-worlds-worst-radio-station/|ESP32 Makes For World’s Worst Radio Station]]

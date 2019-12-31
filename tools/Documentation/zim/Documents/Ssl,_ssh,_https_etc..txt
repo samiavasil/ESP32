@@ -1,0 +1,223 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2019-12-06T12:35:46+02:00
+
+====== Ssl, ssh, https etc. ======
+Created петък 06 декември 2019
+
+This is a copy of post in this page:
+https://medium.com/@kasunpdh/ssl-handshake-explained-4dabb87cdce
+
+===== SSL Handshake explained =====
+**Kasun Dharmadasa**
+
+If you have ever browsed an HTTPS URL through a browser, you have experienced the SSL handshake. Even though might not notice it, the browser and the website is creating an HTTPS connection using one-way SSL handshake.
+
+The main purpose of an SSL handshake is to provide privacy and data integrity for communication between a server and a client. During the Handshake, server and client will exchange important information required to establish a secure connection.
+
+There are two types of SSL handshakes described as one-way SSL and two-way SSL (Mutual SSL). Difference between those two is that in one -way SSL only the server authenticates to the client whereas, in two-way SSL, both server and client authenticate to each other. Usually, when we browse an HTTPS website, one-way SSL is being used where only our browser (client) validates the identity of the website (server). Two-way SSL is mostly used in server to server communication where both parties need to validate the identity of each other.
+
+During an SSL handshake, the server and the client follow the below set of steps.
+
+=== 1. Client Hello ===
+The client will send the information that will be required by the server to start an HTTPS connection.
+{{{code: lang="sh" linenumbers="True"
+*** ClientHello, TLSv1.2
+RandomCookie: *** ClientHello, TLSv1.2
+RandomCookie: GMT: -1892413556 bytes = { GMT: -351008774 bytes = { 169, 131, 204, 213, 154, 96, 7, 136, 43, 142, 232, 138, 148, 171, 52, 226, 155, 202, 145, 57, 210, 132, 227, 182, 67, 222, 161, 28, 20 }
+Session ID: 239, 10, 92, 143, 185, {}
+93, Cipher Suites: [Unknown 0x8a:0x8a, TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256, TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256, TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384, TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384, Unknown 0xcc:0xa9, Unknown 0xcc:0xa8, TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA, TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA, TLS_RSA_WITH_AES_128_GCM_SHA256, TLS_RSA_WITH_AES_256_GCM_SHA384, TLS_RSA_WITH_AES_128_CBC_SHA, TLS_RSA_WITH_AES_256_CBC_SHA, SSL_RSA_WITH_3DES_EDE_CBC_SHA]
+………………………………………………
+}}}
+
+
+In the above log, we can see that the client hello with TLS v1.2. By this, the client notifies the server that it has the support for TLS[1] versions 1.2 and below. List of ciphers[2] that are supported by the client can also be seen from the above log. Out of this list, the server will select a cipher suite that it supports. If the list contains cipher suites that server does not recognize, support, or wish to use, the server will ignore those ciphers. If no supported cipher suites were found the server will send a failure alert and close the connection.
+
+=== 2. Server Hello ===
+
+The server will respond back with the configuration it selected from the Client Hello along with its information to proceed with the handshake. Server Hello will be as follows.
+{{{code: lang="sh" linenumbers="True"
+*** ServerHello, TLSv1.2
+RandomCookie: GMT: 1518335451 bytes = { 19, 150, 56, 42, 168, 202, 151, 43, 174, 226, 187, 53, 135, 67, 244, 170, 59, 176, 105, 150, 50, 112, 167, 83, 192, 48, 171, 64 }
+Session ID: {91, 128, 246, 219, 26, 93, 46, 172, 85, 212, 221, 79, 20, 186, 108, 134, 200, 239, 150, 102, 172, 24, 125, 171, 137, 53, 5, 130, 53, 228, 2, 195}
+Cipher Suite: TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA
+Compression Method: 0
+Extension renegotiation_info, renegotiated_connection: <empty>
+***
+}}}
+
+Sever will select the TLS version according to the lower of that suggested by the client in the Client Hello message and the highest supported by the server. The server will also send back the cipher suite it selected from the list of ciphers presented by the client.
+Along with the Server Hello, the server will also send the certificate[3] of the server with the certificate chain. The certificate chain will be validated against the certificates in the client trust store[4].
+
+{{{code: lang="sh" linenumbers="True"
+** Certificate chain
+chain [0] = [
+[
+ Version: V3
+ Subject: CN=server, OU=ID, O=IBM, L=Hursley, ST=Hants, C=GB
+ Signature Algorithm: SHA256withRSA, OID = 1.2.840.113549.1.1.11
+
+Key: Sun RSA public key, 2048 bits
+ modulus: 17397562757879783124811507432494159361243533796048391161052829821122241422546147907779583980536886743765496985274573369668302996974964349098220930856827026983442125212118340479175872257401994146576001849503528844021528618702289642320157895787705650513758990004411195572445830613057931701313142946380207623174021376881040589912594451781207558263630010509870784494298596448861811827669869221033031956053367890915692918086795954628465637743034777850129818069833958463245749899713073673871721233098662285260745282530972322499603703844901496085490388703767606182211892402117158287170480970610942364235511256363933850852797
+ public exponent: 65537
+ Validity: [From: Sat Jul 28 09:08:48 IST 2018,
+ To: Sun Jul 28 09:08:48 IST 2019]
+ Issuer: CN=server, OU=ID, O=IBM, L=Hursley, ST=Hants, C=GB
+ SerialNumber: [ 7d834874]
+Certificate Extensions: 1
+[1]: ObjectId: 2.5.29.14 Criticality=false
+SubjectKeyIdentifier [
+KeyIdentifier [
+0000: C7 24 EA C3 1E 3E 58 8E BD E3 AE A9 17 01 00 51 .$…>X……..Q
+0010: B0 83 D4 68 …h
+]
+]
+]
+ Algorithm: [SHA256withRSA]
+ Signature:
+0000: 4B FA 93 D8 56 78 05 D8 89 BC 2A 3A B6 C3 7F A5 K…Vx….*:….
+0010: 03 D8 56 3B E6 9F 0B 17 B5 A2 61 AE 43 46 A4 85 ..V;……a.CF..
+0020: 3F 60 2E 04 41 0D C2 7A 35 0D 56 F5 FE 9D 05 51 ?`..A..z5.V….Q
+0030: 4A 0B BB 5B 30 ED 85 AF 1C 95 13 15 7D A0 2C DE J..[0………,.
+0040: B4 A1 7A D0 5D E4 C0 91 37 C2 ED 37 39 65 7D 02 ..z.]…7..79e..
+0050: B5 A4 72 FF EB 6C D5 F4 FD BC 32 FD 9F C8 3A 49 ..r..l….2…:I
+0060: 53 64 F8 C6 A0 D6 DB 89 2C 36 60 97 8B 33 8F 95 Sd……,6`..3..
+0070: 18 9C 1A F2 F8 F1 66 5E F3 0B 76 54 08 AB A9 88 ……f^..vT….
+0080: 5D E9 2D 6B AE 6D 98 09 57 A0 2A 9E C6 6B 89 53 ].-k.m..W.*..k.S
+0090: 8E B3 58 C3 8D 73 C5 D3 58 2F 68 F0 4E 0A EF 29 ..X..s..X/h.N..)
+00A0: 54 95 00 34 6A C4 D2 56 22 64 05 F9 9F A4 81 44 T..4j..V"d…..D
+00B0: 44 77 95 A7 86 5A D3 EE EA 8E 06 19 ED 94 F1 83 Dw…Z……….
+00C0: F4 A1 F4 A0 76 94 02 40 30 C0 95 6A F2 4F 32 BB ….v..@0..j.O2.
+00D0: 79 A2 1B 40 F5 EB 37 5B B7 0C FA 18 DE 04 18 7D y..@..7[……..
+00E0: 5A 1A 95 D7 E7 00 4C 7F 3C 71 CE 8E 03 07 BD 50 Z…..L.<q…..P
+00F0: 6D 49 52 75 66 D2 CA 45 AB B8 EE B1 C2 C9 72 8A mIRuf..E……r.
+]
+***
+}}}
+
+
+=== 3. Server Key Exchange Message ===
+
+This message will be sent by the server to the client carrying the required details for the client to generate the per-master secret. This message will not be sent if RSA key exchange algorithm (more in this later) or any other key exchange algorithms are used that do not require the information from the server to generate a pre-master secret.
+
+For Elliptic Curve Diffie Hellman(ECDH)[5] key exchange, the following details on the server ECDH public key are being sent to the client.
+
+{{{code: lang="sh" linenumbers="True"
+*** ECDH ServerKeyExchange
+Signature Algorithm SHA256withRSA
+Server key: Sun EC public key, 256 bits
+  public x coord: 49880139518100326927648337356136531406906846853753693344570844017045565963249
+  public y coord: 95714017526253024568876509155195989984116809887282783483716821451591048546410
+  parameters: secp256r1 [NIST P-256, X9.62 prime256v1] (1.2.840.10045.3.1.7)
+}}}
+
+
+=== 4. Certificate Request ===
+
+This is the place where one-way SSL defers from two-way SSL. In one-way SSL, the authenticity of the client is not being validated. Hence, this step is omitted in one-way SSL handshake.
+
+During this step, the server will send a certificate request from the client with the certificate type, certificate signature algorithms and certificate authorities [6] supported by the server. There can be situations where the certificate authorities list can be empty. In such scenarios, the client may choose whether to send or avoid sending of the client certificate (depends on the client implementation)
+
+{{{code: lang="sh" linenumbers="True"
+** CertificateRequest
+Cert Types: RSA, DSS, ECDSA
+Supported Signature Algorithms: SHA512withECDSA, SHA512withRSA, SHA384withECDSA, SHA384withRSA, SHA256withECDSA, SHA256withRSA, SHA256withDSA, SHA224withECDSA, SHA224withRSA, SHA224withDSA, SHA1withECDSA, SHA1withRSA, SHA1withDSA
+Cert Authorities:
+<CN=server, OU=ID, O=IBM, L=Hursley, ST=Hants, C=GB>
+<CN=client, OU=ID, O=IBM, L=Hursley, ST=Hants, C=GB>
+*** ServerHelloDone
+}}}
+
+
+Finally, the server sends the Server Hello Done message indicating the end of Server Hello. After sending this message, the server will wait for a client response.
+
+=== 5.  Client Certificate ===
+
+The client presents its certificate chain to the server. The certificate needs to be appropriate for the negotiated cipher suite’s key exchange algorithm, and any negotiated extensions.
+
+{{{code: lang="sh" linenumbers="True"
+*** Certificate chain
+chain [0] = [
+[
+ Version: V3
+ Subject: CN=client, OU=ID, O=IBM, L=Hursley, ST=Hants, C=GB
+ Signature Algorithm: SHA256withRSA, OID = 1.2.840.113549.1.1.11
+Key: Sun RSA public key, 2048 bits
+ modulus: 18119263742031194496605769187455443270597945138184373600190568567529223307881832206636149174898170318962976721473838161099154403131753987226572202408028529227618229923799372008493985299840890900724464000772003100272063510307951510774059438949182596756535864573609939013131649003265478713069926095732605709196278782011601814469262789931086208205589428797070602798907978049568830083601427658925256219608088802036407715832882313969434745397608912908804797572648755351812363722460094682723499117056761800745131355458387860695343833158680929499842492998494287303389968052301777591093565784473811706286599357517891252515661
+ public exponent: 65537
+ Validity: [From: Sat Jul 28 08:15:17 IST 2018,
+ To: Sun Jul 28 08:15:17 IST 2019]
+ Issuer: CN=client, OU=ID, O=IBM, L=Hursley, ST=Hants, C=GB
+ SerialNumber: [ 7ef725fc]
+Certificate Extensions: 1
+[1]: ObjectId: 2.5.29.14 Criticality=false
+SubjectKeyIdentifier [
+KeyIdentifier [
+0000: 97 E7 01 68 93 84 EE 2D 7D 90 5E 67 F7 55 44 86 …h…-..^g.UD.
+0010: 1D 7C 1B F6 ….
+]
+]
+]
+ Algorithm: [SHA256withRSA]
+ Signature:
+0000: 24 7C 86 49 7A 51 4C 30 98 A7 A4 C4 98 7D D3 3C $..IzQL0…….<
+0010: 73 6D CC D8 4B 54 BA 7F F2 CE B4 C2 B5 56 CF 7C sm..KT…….V..
+0020: A8 8A 7E DD C4 F1 BE 95 A3 87 A3 2C A8 14 43 C5 ………..,..C.
+0030: A3 85 64 FE D2 42 BA 3D 67 18 3B FB 09 9A 14 69 ..d..B.=g.;….i
+0040: D6 ED 96 74 8F 45 89 8A 86 A8 41 39 BF 54 70 E4 …t.E….A9.Tp.
+0050: D2 AA 9F E7 86 25 09 1A B3 62 2A 91 49 FF 9D 53 …..%…b*.I..S
+0060: 2B C2 DA 07 92 21 BB 41 7C 7C E8 A3 31 4B BE 5F +….!.A….1K._
+0070: 1B 6A 6E 05 F1 90 B8 26 5D F1 16 1C AA 2F 58 45 .jn….&]…./XE
+0080: AD 31 0E 21 29 C3 C9 C6 05 49 55 16 70 73 3A B2 .1.!)….IU.ps:.
+0090: B6 4F 5F 88 77 E2 10 03 DF 89 B8 FE D5 6D E8 98 .O_.w……..m..
+00A0: C9 26 7D 1F 28 1C 15 04 B5 84 2F 47 97 C5 B7 3C .&..(…../G…<
+00B0: B8 04 55 1B C9 54 64 55 B6 77 FC A7 E1 3B AC 7B ..U..TdU.w…;..
+00C0: 92 D4 C1 AE 80 34 2B 54 FB B2 B3 78 33 86 FD 10 …..4+T…x3…
+00D0: 06 BC E8 60 EE 8F 24 74 26 8C 43 E4 49 43 55 35 …`..$t&.C.ICU5
+00E0: 16 F0 F8 C5 7D 79 25 FE 67 7E FF 27 06 22 01 BA …..y%.g..'."..
+00F0: F7 DE F2 0C CF 71 A8 7B 49 20 26 C9 B4 20 3E F7 …..q..I &.. >.
+]
+}}}
+
+
+=== 6. Client Key Exchange Message ===
+
+This message needs to be sent by the client following the Client Certificate message. If the client certificate is not being presented (in one-way SSL), the client key exchange message should be sent after the client receives the ServerHelloDone message.
+
+As we all know the data transferred between the server and the client in an HTTPS connection will be encrypted. Symmetric encryption[7] is being used for this purpose as the computational cost is much lower than Asymmetric encryption. In order to use symmetric encryption, there needs to be a common key between the two ends. The purpose of this message is to generate that common key between that client and the server without exposing to an outsider.
+
+There are two client key exchange methods described in the TLS v1.2 spec. They are RSA[8] and Diffie-Hellman.
+
+If RSA is used as the key exchange algorithm, the client generates a 48-byte pre-master secret. The client encrypts the pre-master secret by the public key of the certificate and sends to the server. Only the server will have the corresponding private key to decrypt and get the client generated pre-master secret.
+
+If Diffie-Hellman is used, the Diffie-Hellman parameters are transmitted to allow both client and server to generate the same pre-master secret.
+
+After that, both sides will generate a master secret using the pre-master secret and the master secret will be used to generate the symmetric key for encrypting the session data
+
+=== 7. Finished ===
+
+After successful authentication and generating the pre-master secrets/master secrets, a change cipher spec message will be sent by both client and server indicating that the rest of the communication will be encrypted.
+
+The Finished message will immediately follow the change cipher spec message. This will be the first message encrypted with the negotiated algorithms. Application data will be transferred only after both parties send the finished message and verifying the content of the message.
+
+=== 8. References ===
+
+[1] https://tools.ietf.org/html/rfc5246
+
+[2] https://docs.microsoft.com/en-us/windows/desktop/secauthn/cipher-suites-in-schannel
+
+[3] https://www.websecurity.symantec.com/security-topics/what-is-ssl-tls-https
+
+[4] https://docs.apigee.com/api-platform/system-administration/keystores-and-truststores
+
+[5] https://wiki.openssl.org/index.php/Elliptic_Curve_Diffie_Hellman
+
+[6] https://www.globalsign.com/en/ssl-information-center/what-are-certification-authorities-trust-hierarchies/
+
+[7] https://www.ssl2buy.com/wiki/symmetric-vs-asymmetric-encryption-what-are-differences
+
+[8] https://www.geeksforgeeks.org/rsa-algorithm-cryptography/
+
+[9] https://www.acunetix.com/blog/articles/establishing-tls-ssl-connection-part-5/
+
+
