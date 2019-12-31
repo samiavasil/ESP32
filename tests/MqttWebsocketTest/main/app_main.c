@@ -11,12 +11,10 @@
 #include <stddef.h>
 #include <string.h>
 #include "esp_wifi.h"
-#include "esp_wpa2.h"
 #include "esp_system.h"
-#include "nvs_flash.h"
 #include "esp_event.h"
 #include "tcpip_adapter.h"
-//#include "protocol_examples_common.h"
+#include "app_helper.h"
 
 #include "freertos/event_groups.h"
 #include "freertos/FreeRTOS.h"
@@ -32,6 +30,8 @@
 
 #include "esp_log.h"
 #include "mqtt_client.h"
+
+
 
 static const char *TAG = "MQTTWSS_EXAMPLE";
 
@@ -50,38 +50,50 @@ static esp_err_t mqtt_event_handler_cb(esp_mqtt_event_handle_t event)
     switch (event->event_id) {
         case MQTT_EVENT_CONNECTED:
             ESP_LOGI(TAG, "MQTT_EVENT_CONNECTED");
-            msg_id = esp_mqtt_client_subscribe(client, "/topic/qos0", 0);
+            msg_id = esp_mqtt_client_subscribe(client, "mqtt-demo/qos0", 0);
             ESP_LOGI(TAG, "sent subscribe successful, msg_id=%d", msg_id);
 
-            msg_id = esp_mqtt_client_subscribe(client, "/topic/qos1", 1);
+            msg_id = esp_mqtt_client_subscribe(client, "mqtt-demo/qos1", 1);
             ESP_LOGI(TAG, "sent subscribe successful, msg_id=%d", msg_id);
 
-            msg_id = esp_mqtt_client_unsubscribe(client, "/topic/qos1");
+            msg_id = esp_mqtt_client_unsubscribe(client, "mqtt-demo/qos1");
             ESP_LOGI(TAG, "sent unsubscribe successful, msg_id=%d", msg_id);
             break;
         case MQTT_EVENT_DISCONNECTED:
             ESP_LOGI(TAG, "MQTT_EVENT_DISCONNECTED");
             break;
 
-        case MQTT_EVENT_SUBSCRIBED:
+        case MQTT_EVENT_SUBSCRIBED:{
+        	char data[30];
+
+        	sprintf(data, "Kofti tesche %d ",event->msg_id);
             ESP_LOGI(TAG, "MQTT_EVENT_SUBSCRIBED, msg_id=%d", event->msg_id);
-            msg_id = esp_mqtt_client_publish(client, "/topic/qos0", "data", 0, 0, 0);
+            msg_id = esp_mqtt_client_publish(client, "mqtt-demo/qos0", data, 0, 0, 0);
             ESP_LOGI(TAG, "sent publish successful, msg_id=%d", msg_id);
             break;
+        }
         case MQTT_EVENT_UNSUBSCRIBED:
             ESP_LOGI(TAG, "MQTT_EVENT_UNSUBSCRIBED, msg_id=%d", event->msg_id);
             break;
         case MQTT_EVENT_PUBLISHED:
             ESP_LOGI(TAG, "MQTT_EVENT_PUBLISHED, msg_id=%d", event->msg_id);
             break;
-        case MQTT_EVENT_DATA:
-            ESP_LOGI(TAG, "MQTT_EVENT_DATA");
+        case MQTT_EVENT_DATA:{
+        	char data[30];
+        	ESP_LOGI(TAG, "MQTT_EVENT_DATA");
             printf("TOPIC=%.*s\r\n", event->topic_len, event->topic);
             printf("DATA=%.*s\r\n", event->data_len, event->data);
+
+            sprintf(data, "Kofti tesche %d ",event->msg_id);
+            msg_id = esp_mqtt_client_publish(client, "mqtt-demo/qos0", data, 0, 0, 0);
             break;
+        }
         case MQTT_EVENT_ERROR:
             ESP_LOGI(TAG, "MQTT_EVENT_ERROR");
             break;
+        case MQTT_EVENT_BEFORE_CONNECT:     /*!< The event occurs before connecting */
+        	ESP_LOGI(TAG, "MQTT_EVENT_BEFORE_CONNECT");
+        	break;
         default:
             ESP_LOGI(TAG, "Other event id:%d", event->event_id);
             break;
@@ -113,6 +125,7 @@ void app_main(void)
     ESP_LOGI(TAG, "[APP] Startup..");
     ESP_LOGI(TAG, "[APP] Free memory: %d bytes", esp_get_free_heap_size());
     ESP_LOGI(TAG, "[APP] IDF version: %s", esp_get_idf_version());
+    print_app_info();
 
     esp_log_level_set("*", ESP_LOG_INFO);
     esp_log_level_set("MQTT_CLIENT", ESP_LOG_VERBOSE);
@@ -124,8 +137,7 @@ void app_main(void)
     esp_log_level_set("TRANSPORT", ESP_LOG_VERBOSE);
     esp_log_level_set("OUTBOX", ESP_LOG_VERBOSE);
 
-    ESP_ERROR_CHECK(nvs_flash_init());
-
+    test_flash_init();
     ESP_ERROR_CHECK(wifi_connect());
 
     ESP_LOGI(TAG, "Mqtt App Star..");
