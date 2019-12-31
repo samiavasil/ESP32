@@ -1,0 +1,4 @@
+key,type,encoding,value
+test_nvs,namespace,,
+on_off,data,u8,1
+ssid,data,string,testsid
