@@ -10,3 +10,5 @@ The idea is to create a wrapper library for WiFI connectivity, with a common con
 It should be possible to configure it at build time (via menuconfig), but it must be able to switch between different connection types at runtime.
 The library should maintain wifi smart configuration whenever possible.
 
+
+[[https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/partition-tables.html|Esp32 Partition Tables]]

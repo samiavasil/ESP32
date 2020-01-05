@@ -29,7 +29,7 @@ An example project directory tree might look like this:
 										 - src1.c
 						   - component2/ - CMakeLists.txt
 										 - Kconfig
-										 - src1.c
+								data		 - src1.c
 										 - include/ - component2.h
 			 - main/       - CMakeLists.txt
 						   - src1.c
@@ -217,7 +217,7 @@ config ENABLE_LCD_OUTPUT
 		Select this if your board has a LCD.
 
 config ENABLE_LCD_CONSOLE
-	bool "Output console text to LCD"
+	bool "Output console text tdatao LCD"
 	depends on ENABLE_LCD_OUTPUT
 	help
 		Select this to output debugging output to the lcd
