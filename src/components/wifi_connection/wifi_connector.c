@@ -18,13 +18,26 @@
 #include "lwip/sockets.h"
 #include "lwip/dns.h"
 #include "lwip/netdb.h"
-
+#include "esp_wps.h"
 #include "wifi_connector.h"
 
 #include "esp_log.h"
 
+#define MAX_WIFI_SSID_LEN (32)
+
+
+#if 0
+typedef enum{
+	EAP_TLS,
+	EAP_PEAP,
+	EAP_TTLS,
+	EAP__MAX,
+}eap_method_t;
 
 typedef struct {
+	sint8_t  uname[20];
+	sint8_t  password[20];
+	sint8_t  eap_id[20];
 	uint8_t  srv_validate;
 	/*Server CA validation certificate*/
 	uint8_t* ca_srv_pem_start;
@@ -37,19 +50,19 @@ typedef struct {
 	uint32_t client_key_len;
 }wpa_connfig_t;
 
-typedef enum{
-	WPS_PBS,
-	WPS_PIN,
-	WPS_DISABLE
-}wps_types_t;
+typedef struct{
+	wps_type_t wps_type;
+} wps_cfg_t;
+
 
 typedef struct{
-	uint8_t  wificon_type;
-    uint8_t* ssid;
-    wps_types_t wps_type;
+    uint8_t        ssid[MAX_WIFI_SSID_LEN];
+    ewifi_con_t    wificon_type;
+    wps_cfg_t*     wps_cfg;
     wpa_connfig_t* wpa_cfg;
-}wificon_cfg_t;
-
+    uint32_t       max_retry;
+}wifi_con_cfg_t;
+#endif
 static const char *TAG = "WIFI_CONN";
 
 /* FreeRTOS event group to signal when we are connected & ready to make a request */
@@ -98,7 +111,7 @@ static void event_handler(void* arg, esp_event_base_t event_base,
 	}
 }
 
-static void initialise_wifi(void)
+static void _initialise_wifi(void)
 {
 
 #ifdef CONFIG_WIFICON_VALIDATE_SERVER_CERT
@@ -114,12 +127,23 @@ static void initialise_wifi(void)
 	wifi_event_group = xEventGroupCreate();
 
 	ESP_ERROR_CHECK(esp_event_loop_create_default());
+
 	wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT();
 	ESP_ERROR_CHECK( esp_wifi_init(&cfg) );
 
+	wifi_config_t wifi_config_old;
+	int rc = esp_wifi_get_config(ESP_IF_WIFI_STA, &wifi_config_old);
+	if(ESP_OK == rc ) {
+		ESP_LOGI(TAG, "Boot WiFi configuration SSID %s...", wifi_config_old.sta.ssid);
+		ESP_LOGI(TAG, "Boot WiFi configuration password %s...", wifi_config_old.sta.password);
+	}
+	else {
+		ESP_LOGI(TAG, "esp_wifi_get_config error code %s...", esp_err_to_name(rc));
+	}
+
 	ESP_ERROR_CHECK( esp_event_handler_register(WIFI_EVENT, ESP_EVENT_ANY_ID, &event_handler, NULL) );
 	ESP_ERROR_CHECK( esp_event_handler_register(IP_EVENT, IP_EVENT_STA_GOT_IP, &event_handler, NULL) );
-	ESP_ERROR_CHECK( esp_wifi_set_storage(WIFI_STORAGE_RAM) );
+	ESP_ERROR_CHECK( esp_wifi_set_storage(WIFI_STORAGE_FLASH) );
 
 	wifi_config_t wifi_config = {
 			.sta = {
@@ -156,7 +180,7 @@ static void initialise_wifi(void)
 	ESP_ERROR_CHECK( esp_wifi_start() );
 }
 
-static void wpa2_enterprise_WIFICON_task(void *pvParameters)
+static void _wificon_task(void *pvParameters)
 {
 	tcpip_adapter_ip_info_t ip;
 	memset(&ip, 0, sizeof(tcpip_adapter_ip_info_t));
@@ -181,8 +205,8 @@ esp_err_t wifi_connect(void)
 	const TickType_t xTicksToWait = 45000 / portTICK_PERIOD_MS;
 	EventBits_t uxBits;
 	ESP_LOGI(TAG, "Initialize Wifi");
-	initialise_wifi();
-	xTaskCreate(&wpa2_enterprise_WIFICON_task, "wpa2_enterprise_WIFICON_task", 4096, NULL, 5, NULL);
+	_initialise_wifi();
+	xTaskCreate(&_wificon_task, "_wificon_task", 4096, NULL, 5, NULL);
 
 	ESP_LOGI(TAG, "Wait for WIFI");
 	// Wait a maximum of 100ms for either bit 0 or bit 4 to be set within

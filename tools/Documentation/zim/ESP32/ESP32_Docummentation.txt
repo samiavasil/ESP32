@@ -6,7 +6,7 @@ Creation-Date: 2019-12-12T14:57:51+02:00
 Created четвъртък 12 декември 2019
 
 [[./esp32_technical_reference_manual_en.pdf|esp32_technical_reference_manual_en.pdf]] 
-
+[[./espressif-esp-idf-latest.pdf|Read the Docs Template Documentation]] 
 
 **Memory Capabilities**
 
