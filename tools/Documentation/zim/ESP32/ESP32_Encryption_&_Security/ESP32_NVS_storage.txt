@@ -113,7 +113,8 @@ menu "NVS"
 endmenu
 }}}
 
-This enable NVS encription and remove FLASH ENCRIPTION dependencies.
+This enable NVS encription and remove FLASH ENCRIPTION dependencies. 
+EIII REMOVE this after all tests on final version it shouldn't exist.!!!!!
 
 Test Flow TODO:
 

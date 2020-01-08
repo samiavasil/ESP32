@@ -1,0 +1,13 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2020-01-08T15:01:13+02:00
+
+====== ESP32 OTA ======
+Created сряда 08 януари 2020
+
+
+
+[[https://docs.espressif.com/projects/esp-idf/en/latest/api-reference/system/ota.html#_CPPv444esp_ota_mark_app_invalid_rollback_and_rebootv|Over The Air Updates (OTA)]]
+[[https://docs.espressif.com/projects/esp-idf/en/latest/api-reference/system/esp_https_ota.html|ESP HTTPS OTA]]
+http://www.mark-fink.de/2018-11-17-esp32-idf-ota-update/
+

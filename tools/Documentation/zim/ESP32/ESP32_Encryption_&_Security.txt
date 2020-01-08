@@ -7,6 +7,7 @@ Created сряда 11 декември 2019
 
 ===== Links =====
 https://medium.com/the-esp-journal/understanding-esp32s-security-features-14483e465724
+
 https://docs.espressif.com/projects/esp-idf/en/latest/security/secure-boot.html
 
 [[https://docs.espressif.com/projects/esp-idf/en/release-v3.3/security/flash-encryption.html|Flash Encryption]]

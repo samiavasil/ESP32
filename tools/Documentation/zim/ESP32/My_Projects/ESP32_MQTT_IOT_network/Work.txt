@@ -8,6 +8,10 @@ Created неделя 05 януари 2020
 === 1  WIFI connection ===
 Use my library [[Unify wifi libraries]]
 
+1.1. Configuration via WWW
+https://www.w3schools.com
+
+
 === 2 Application Flash Partitioning ===
 [[https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/partition-tables.html|Esp32 Partition Tables]]
 
@@ -20,8 +24,10 @@ Use my library [[Unify wifi libraries]]
 
 
 === 4 OTA ===
+
+[[ESP32:ESP32 OTA]]
 Should be tested!!!
 
-[[https://docs.espressif.com/projects/esp-idf/en/latest/api-reference/system/ota.html#_CPPv444esp_ota_mark_app_invalid_rollback_and_rebootv|Over The Air Updates (OTA)]]
-[[https://docs.espressif.com/projects/esp-idf/en/latest/api-reference/system/esp_https_ota.html|ESP HTTPS OTA]]
-http://www.mark-fink.de/2018-11-17-esp32-idf-ota-update/
+
+
+
