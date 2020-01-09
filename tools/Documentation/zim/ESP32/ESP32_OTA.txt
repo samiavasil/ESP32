@@ -5,6 +5,10 @@ Creation-Date: 2020-01-08T15:01:13+02:00
 ====== ESP32 OTA ======
 Created сряда 08 януари 2020
 
+1 Prepare https server which serve upgrades.
+* Check this [[Documents:Running local development server on https]]
+* Prepare 
+
 
 
 [[https://docs.espressif.com/projects/esp-idf/en/latest/api-reference/system/ota.html#_CPPv444esp_ota_mark_app_invalid_rollback_and_rebootv|Over The Air Updates (OTA)]]

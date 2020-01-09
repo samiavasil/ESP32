@@ -30,7 +30,7 @@
 
 #include "esp_log.h"
 #include "mqtt_client.h"
-
+#include "app_http.h"
 
 
 static const char *TAG = "MQTTWSS_EXAMPLE";
@@ -128,11 +128,11 @@ void app_main(void)
     print_app_info();
 
     esp_log_level_set("*", ESP_LOG_INFO);
-    esp_log_level_set("MQTT_CLIENT", ESP_LOG_VERBOSE);
+    esp_log_level_set("MQTT_CLIENT", ESP_LOG_NONE);
     esp_log_level_set("MQTT_EXAMPLE", ESP_LOG_VERBOSE);
     esp_log_level_set("TRANSPORT_TCP", ESP_LOG_VERBOSE);
     esp_log_level_set("TRANSPORT_SSL", ESP_LOG_VERBOSE);
-    esp_log_level_set("WIFI_CONN", ESP_LOG_VERBOSE);
+    esp_log_level_set("WIFI_CONN", ESP_LOG_NONE);
     // esp_log_level_set("TRANSPORT_WS", ESP_LOG_VERBOSE);
     esp_log_level_set("TRANSPORT", ESP_LOG_VERBOSE);
     esp_log_level_set("OUTBOX", ESP_LOG_VERBOSE);
@@ -140,7 +140,9 @@ void app_main(void)
     test_flash_init();
     ESP_ERROR_CHECK(wifi_connect());
 
-    ESP_LOGI(TAG, "Mqtt App Star..");
-    mqtt_app_start();
+  //  ESP_LOGI(TAG, "Mqtt App Star..");
+   // mqtt_app_start();
 
+    ESP_LOGI(TAG, "HTTPS client task Start..");
+    ESP_ERROR_CHECK(app_http_task());
 }

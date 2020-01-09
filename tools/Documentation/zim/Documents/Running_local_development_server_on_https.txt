@@ -11,38 +11,39 @@ Firstly, there are two types of certificates: One being signed by a ‘Certifica
 
 As we need to run local development server with https, a self-signed certificate would do just great in our case. To generate it, execute below commands:
 
-Start OpenSSL by running below command in cmd,
-
-{{{code: lang="sh" linenumbers="True"
-openssl
-}}}
-
-
-**Once you are in OpenSSL, follow below steps:**
-
 === 1.  First we generate RSA key for our root CA and store it in file test_key.pem. If you want to password-protect this key, add option -des3. ===
 
 {{{code: lang="sh" linenumbers="True"
-genrsa -out test_key.pem
-genrsa -out test_key.pem -des3
+openssl genrsa -out test_key.pem
+#openssl genrsa -out test_key.pem -des3   This way have an issue on server run. Should be checked how to provide the key passw!!!
 }}}
 
 
 === 2. This command generates a Certificate Signing Request, which you could instead use to generate a CA-signed certificate. ===
 
 {{{code: lang="sh" linenumbers="True"
-req -new -key test_key.pem -out test_csr.pem
+openssl req -new -sha256 -key test_key.pem -out test_csr.pem
 }}}
 
 
 === 3. Next, we create our self-signed root CA certificate cert.pem; you’ll need to provide an identity for your root CA. The -x509 option is used for a self-signed certificate. You may specify the validity of your certificate by providing the number of days. ===
 
 {{{code: lang="sh" linenumbers="True"
-x509 -req -days 8888 -in test_csr.pem -signkey test_key.pem -out test_cert.pem
+openssl x509 -req -days 8888 -in test_csr.pem -signkey test_key.pem -out test_cert.pem
 }}}
 
 
 This will create key.pem, csr.pem and cert.pem file in the bin folder of your OpenSSL. You will only require cert.pem(The Certificate) & key.pem(The Private Key) for an SSL connection.
+
+Alternative way to generate  CA certificate and key is to use  just one command ( information for this can be found in  examples/system/ota/README.md ). 
+{{{code: lang="sh" linenumbers="True"
+openssl req -x509 -newkey rsa:2048 -keyout ca_key.pem -out ca_cert.pem -days 365 -nodes
+}}}
+
+
+**IMPORTANT**//: //__Command for certificate generation expect some input information.  For proper certificate generation ( one wich will be accepted by eps-tls),  CN (Common Name) field should__
+__be set to  domain name or IP address of the host where the server will be deployed. __
+__For example:  CN (Common Name): IP__
 
 To see certificate info in UBUNTU you can use:
 {{{code: lang="sh" linenumbers="True"
@@ -50,6 +51,9 @@ gcr-viewer test_csr.pem
 }}}
 
 
+===== How to Create Your Own SSL Certificate Authority for Local HTTPS Development =====
+This should be investigated !!!
+[[https://medium.com/@hugomejia74/how-to-create-your-own-ssl-certificate-authority-for-local-https-development-3b97573c7bb5|How to Create Your Own SSL Certificate Authority for Local HTTPS Development]]
 
 ===== Running local development server =====
 
@@ -65,7 +69,7 @@ Copy cert.pem & key.pem to root of your project directory.
 Run below command:
 
 {{{code: lang="sh" linenumbers="True"
-	http-server --ssl -c-1 -p 8080 -a 127.0.0.1
+	http-server  ./www_dir/ -S -c-1  -C ./certs/test_cert.pem -K ./certs/test_key.pem -p 8080 -a 127.0.0.1
 }}}
 
 

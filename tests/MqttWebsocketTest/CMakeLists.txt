@@ -21,3 +21,5 @@ if  (CONFIG_WIFICON_EAP_METHOD_TLS)
 	target_add_binary_data(mqtt_websocket_test.elf ./main/${CONFIG_WIFICON_EAP_METHOD_TLS_CERT_NAME} TEXT)
 	target_add_binary_data(mqtt_websocket_test.elf ./main/${CONFIG_WIFICON_EAP_METHOD_TLS_KEY_NAME} TEXT)
 endif()
+
+target_add_binary_data(mqtt_websocket_test.elf "main/ota/certs/test_cert.pem" TEXT)

@@ -10,6 +10,8 @@ Created четвъртък 12 декември 2019
 
 **Memory Capabilities**
 
+[[https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/general-notes.html|General Notes About ESP-IDF Programming]]
+
 The ESP32 contains multiple types of RAM:
 	DRAM (Data RAM) is memory used to hold data. This is the most common kind of memory accessed as heap.
 	IRAM (Instruction RAM) usually holds executable data only. If accessed as generic memory, all accesses must be 32-bit aligned.
