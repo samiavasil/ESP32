@@ -14,9 +14,9 @@
 #include "esp_tls.h"
 
 /* Constants that aren't configurable in menuconfig */
-#define WEB_SERVER "10.44.188.29"
+#define WEB_SERVER "192.168.0.170"
 #define WEB_PORT "8080"
-#define WEB_URL "https://10.44.188.29:"WEB_PORT"/upgrade/hw_upgrade.bin"
+#define WEB_URL "https://"WEB_SERVER":"WEB_PORT"/upgrade/hw_upgrade.bin"
 
 static const char *TAG = "example";
 
@@ -31,8 +31,8 @@ static const char *REQUEST = "GET " WEB_URL " HTTP/1.1\r\n"
     "\r\n";
 
 /* Root CA root certificate */
-extern const uint8_t test_cert_pem_start[] asm("_binary_test_cert_pem_start");
-extern const uint8_t test_cert_pem_end[]   asm("_binary_test_cert_pem_end");
+extern const uint8_t test_cert_pem_start[] asm("_binary_myCA_pem_start");
+extern const uint8_t test_cert_pem_end[]   asm("_binary_myCA_pem_end");
 
 
 static void https_get_task(void *pvParameters)
@@ -44,6 +44,7 @@ static void https_get_task(void *pvParameters)
         esp_tls_cfg_t cfg = {
             .cacert_buf  = test_cert_pem_start,
             .cacert_bytes = test_cert_pem_end - test_cert_pem_start,
+		.skip_common_name = true,
         };
 
         struct esp_tls *tls = esp_tls_conn_http_new(WEB_URL, &cfg);
