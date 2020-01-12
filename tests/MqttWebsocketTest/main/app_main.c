@@ -140,8 +140,10 @@ void app_main(void)
     test_flash_init();
     ESP_ERROR_CHECK(wifi_connect());
 
-  //  ESP_LOGI(TAG, "Mqtt App Star..");
-   // mqtt_app_start();
+    do_firmware_upgrade();
+
+    ESP_LOGI(TAG, "Mqtt App Star..");
+    mqtt_app_start();
 
     ESP_LOGI(TAG, "HTTPS client task Start..");
     ESP_ERROR_CHECK(app_http_task());

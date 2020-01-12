@@ -10,6 +10,8 @@
 #include "freertos/task.h"
 #include "freertos/event_groups.h"
 
+#include "esp_http_client.h"
+#include "esp_https_ota.h"
 #include "esp_log.h"
 #include "esp_tls.h"
 
@@ -31,9 +33,56 @@ static const char *REQUEST = "GET " WEB_URL " HTTP/1.1\r\n"
     "\r\n";
 
 /* Root CA root certificate */
-extern const uint8_t test_cert_pem_start[] asm("_binary_myCA_pem_start");
-extern const uint8_t test_cert_pem_end[]   asm("_binary_myCA_pem_end");
+extern const uint8_t ca_cert_pem_start[] asm("_binary_myCA_pem_start");
+extern const uint8_t ca_cert_pem_end[]   asm("_binary_myCA_pem_end");
 
+
+esp_http_client_config_t config = {
+    .url = WEB_URL,
+    .cert_pem = (char *)ca_cert_pem_start,
+	.skip_cert_common_name_check = true,
+};
+esp_https_ota_config_t ota_config = {
+   .http_config = &config,
+};
+
+esp_err_t do_firmware_upgrade()
+{
+	esp_err_t ota_finish_err = ESP_OK;
+
+    ESP_LOGI(TAG, "ESP HTTPS OTA Begin from URL: %s", WEB_URL);
+    esp_https_ota_handle_t https_ota_handle = NULL;
+    esp_err_t err = esp_https_ota_begin(&ota_config, &https_ota_handle);
+    if (err != ESP_OK) {
+        ESP_LOGE(TAG, "ESP HTTPS OTA Begin failed");
+        vTaskDelete(NULL);
+    }
+
+    esp_app_desc_t app_desc;
+    err = esp_https_ota_get_img_desc(https_ota_handle, &app_desc);
+    if (err != ESP_OK) {
+        ESP_LOGE(TAG, "esp_https_ota_read_img_desc failed");
+        goto ota_end;
+    }
+    else {
+    	ESP_LOGI(TAG, "app_desc: %s", app_desc.app_elf_sha256);
+    	ESP_LOGI(TAG, "idf version: %s", app_desc.idf_ver);
+    	ESP_LOGI(TAG, "version: %s", app_desc.version);
+    	ESP_LOGI(TAG, "sha: %s", app_desc.app_elf_sha256);
+    }
+
+ota_end:
+    ota_finish_err = esp_https_ota_finish(https_ota_handle);
+    if ((err == ESP_OK) && (ota_finish_err == ESP_OK)) {
+        ESP_LOGI(TAG, "ESP_HTTPS_OTA upgrade successful. Rebooting ...");
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
+     //TODO Enable restart when OTA is implemented   esp_restart();
+    } else {
+        ESP_LOGE(TAG, "ESP_HTTPS_OTA upgrade failed...");
+    }
+
+    return ESP_OK;
+}
 
 static void https_get_task(void *pvParameters)
 {
@@ -42,9 +91,9 @@ static void https_get_task(void *pvParameters)
 
     while(1) {
         esp_tls_cfg_t cfg = {
-            .cacert_buf  = test_cert_pem_start,
-            .cacert_bytes = test_cert_pem_end - test_cert_pem_start,
-		.skip_common_name = true,
+            .cacert_buf  = ca_cert_pem_start,
+            .cacert_bytes = ca_cert_pem_end - ca_cert_pem_start,
+	     	.skip_common_name = true,/*If it is false then Commmon Name should be the same as WEB_SERVER*/
         };
 
         struct esp_tls *tls = esp_tls_conn_http_new(WEB_URL, &cfg);

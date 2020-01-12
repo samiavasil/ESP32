@@ -36,7 +36,7 @@ static void example_print_flash_encryption_status(void);
 static void example_read_write_flash(void);
 #endif
 
-static const char* TAG = "wifi_storage";
+static const char* TAG = "app_helper";
 
  void nvs_dump(const char *partName);
 
@@ -178,7 +178,7 @@ void dump_nvs_partition(const char* name){
 
 void print_app_info(void)
 {
-    ESP_LOGI(TAG, "\nExample to check Flash Encryption status\n");
+    ESP_LOGI(TAG, "Example to check Flash Encryption status");
 
     example_print_chip_info();
     example_print_flash_encryption_status();
