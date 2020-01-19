@@ -32,6 +32,8 @@
 #include "mqtt_client.h"
 #include "app_http.h"
 
+#define MQTT_TOPIC "BARCODE"
+#define QOS 1
 
 static const char *TAG = "MQTTWSS_EXAMPLE";
 
@@ -45,13 +47,12 @@ extern const uint8_t mqtt_eclipse_org_pem_end[]   asm("_binary_mqtt_eclipse_org_
 static esp_err_t mqtt_event_handler_cb(esp_mqtt_event_handle_t event)
 {
     esp_mqtt_client_handle_t client = event->client;
-    int msg_id;
+    int msg_id = -1;
     // your_context_t *context = event->context;
     switch (event->event_id) {
         case MQTT_EVENT_CONNECTED:
             ESP_LOGI(TAG, "MQTT_EVENT_CONNECTED");
-            msg_id = esp_mqtt_client_subscribe(client, "mqtt-demo/qos0", 0);
-            ESP_LOGI(TAG, "sent subscribe successful, msg_id=%d", msg_id);
+            msg_id = esp_mqtt_client_subscribe(client, MQTT_TOPIC, QOS);
 
             msg_id = esp_mqtt_client_subscribe(client, "mqtt-demo/qos1", 1);
             ESP_LOGI(TAG, "sent subscribe successful, msg_id=%d", msg_id);
@@ -68,7 +69,7 @@ static esp_err_t mqtt_event_handler_cb(esp_mqtt_event_handle_t event)
 
         	sprintf(data, "Kofti tesche %d ",event->msg_id);
             ESP_LOGI(TAG, "MQTT_EVENT_SUBSCRIBED, msg_id=%d", event->msg_id);
-            msg_id = esp_mqtt_client_publish(client, "mqtt-demo/qos0", data, 0, 0, 0);
+            msg_id = esp_mqtt_client_publish(client, MQTT_TOPIC, data, 0, QOS, 0);
             ESP_LOGI(TAG, "sent publish successful, msg_id=%d", msg_id);
             break;
         }
@@ -79,13 +80,9 @@ static esp_err_t mqtt_event_handler_cb(esp_mqtt_event_handle_t event)
             ESP_LOGI(TAG, "MQTT_EVENT_PUBLISHED, msg_id=%d", event->msg_id);
             break;
         case MQTT_EVENT_DATA:{
-        	char data[30];
-        	ESP_LOGI(TAG, "MQTT_EVENT_DATA");
+			/*TODO: Fix me*/
             printf("TOPIC=%.*s\r\n", event->topic_len, event->topic);
             printf("DATA=%.*s\r\n", event->data_len, event->data);
-
-            sprintf(data, "Kofti tesche %d ",event->msg_id);
-            msg_id = esp_mqtt_client_publish(client, "mqtt-demo/qos0", data, 0, 0, 0);
             break;
         }
         case MQTT_EVENT_ERROR:
@@ -109,8 +106,13 @@ static void mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_
 static void mqtt_app_start(void)
 {
     const esp_mqtt_client_config_t mqtt_cfg = {
-        .uri = CONFIG_BROKER_URI,
-        .cert_pem = (const char *)mqtt_eclipse_org_pem_start,
+     .uri = CONFIG_BROKER_URI,
+        /*   .cert_pem = (const char *)mqtt_eclipse_org_pem_start,
+        */
+#if CONFIG_BROKER_USER_AUTHENTICATION
+	 .username = CONFIG_BROKER_USER,
+	 .password = CONFIG_BROKER_NAME,
+#endif
     };
 
     ESP_LOGI(TAG, "[APP] Free memory: %d bytes", esp_get_free_heap_size());

@@ -6,12 +6,31 @@ menu "NVS"
         help
             This option enables encryption for NVS. When enabled, AES-XTS is used to encrypt
             the complete NVS data, except the page headers. It requires XTS encryption keys
-            to be stored in an encrypted partition. This means enabling flash encryption is
-            a pre-requisite for this feature.
+            to be stored in an encrypted partition. 
+            !!!!! NOETE: Here on component i do some hack to enable NVS without enabling flash encryption,
+            which is a pre-requisite for this feature. I remove just for testing purpose dependency 
+            of NVS  encription, from flash encriptions. In this way we have encrypted NVS, but not 
+            encripted NVS keys (they are readable from NVS_key partition which is not encrypted with
+            flash encription ). This should be disable on production. See original configuration in
+            NVS esp component.
+
+            
 endmenu
 
 menu "MqttWebsocketTest Configuration"
 
+    config OTA_WEB_SERVER
+        string "OTA update Web Server"
+        default "192.168.0.170"
+        help
+			OTA Web server
+    
+    config OTA_WEB_PORT
+        string "OTA update Web Server Port"
+        default "8080"
+        help           
+            OTA Web server port
+                      
     config BROKER_URI
         string "Broker URL"
         default "wss://mqtt.eclipse.org:443/mqtt"
@@ -21,6 +40,7 @@ menu "MqttWebsocketTest Configuration"
             ssl -> mqtts://mqtt.eclipse.org:8883
             ws  -> ws://mqtt.eclipse.org:80/mqtt
             wss -> wss://mqtt.eclipse.org:443/mqtt
+   
     config BROKER_CERTIFICATE_OVERRIDE
         string "Server certificate override"
         default ""
@@ -29,7 +49,26 @@ menu "MqttWebsocketTest Configuration"
             format certificate
 
     config BROKER_CERTIFICATE_OVERRIDDEN
-        bool
+        bool 
         default y if BROKER_CERTIFICATE_OVERRIDE != ""
 
+    config BROKER_USER_AUTHENTICATION
+        bool "Enable user authentication"
+        default n
+        help
+            Select this to enable user authenntication configuration 
+                
+    config BROKER_USER
+        string "Mqtt Broker user name"
+        default "user"
+        depends on BROKER_USER_AUTHENTICATION
+        help
+            Input mqtt brocker user name         
+        
+    config BROKER_NAME
+        string "Mqtt Broker user password"
+        default "password"
+        depends on BROKER_USER_AUTHENTICATION      
+        help
+            Input mqtt broker user password         
 endmenu

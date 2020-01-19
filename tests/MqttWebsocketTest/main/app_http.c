@@ -16,15 +16,13 @@
 #include "esp_tls.h"
 
 /* Constants that aren't configurable in menuconfig */
-#define WEB_SERVER "192.168.0.170"
-#define WEB_PORT "8080"
-#define WEB_URL "https://"WEB_SERVER":"WEB_PORT"/upgrade/hw_upgrade.bin"
+#define WEB_URL "https://"CONFIG_OTA_WEB_SERVER":"CONFIG_OTA_WEB_PORT"/upgrade/hw_upgrade.bin"
 
-static const char *TAG = "example";
+static const char *TAG = "app_http";
 
 
 static const char *REQUEST = "GET " WEB_URL " HTTP/1.1\r\n"
-    "Host: "WEB_SERVER":"WEB_PORT"\r\n"
+    "Host: "CONFIG_OTA_WEB_SERVER":"CONFIG_OTA_WEB_PORT"\r\n"
     "User-Agent: esp-idf/1.0 esp32"
 	"Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\n"
 	"Accept-Language: en-US,en;q=0.5\r\n"
@@ -55,7 +53,7 @@ esp_err_t do_firmware_upgrade()
     esp_err_t err = esp_https_ota_begin(&ota_config, &https_ota_handle);
     if (err != ESP_OK) {
         ESP_LOGE(TAG, "ESP HTTPS OTA Begin failed");
-        vTaskDelete(NULL);
+        return ESP_FAIL;
     }
 
     esp_app_desc_t app_desc;
@@ -84,6 +82,30 @@ ota_end:
     return ESP_OK;
 }
 
+#define HTTP_DATA "GET " WEB_URL " HTTP/1.1\r\n"
+
+esp_err_t app_https_read_with_client(void) {
+
+	esp_http_client_config_t config = {
+	    .url = WEB_URL,
+	    .cert_pem = (char *)ca_cert_pem_start,
+		.skip_cert_common_name_check = true,
+	};
+
+	esp_http_client_handle_t client = esp_http_client_init(&config);
+
+	if(client == NULL) {
+		return ESP_FAIL;
+	}
+
+	esp_http_client_write(client, HTTP_DATA, sizeof(HTTP_DATA));
+
+
+	esp_http_client_read(client, (char *)REQUEST, strlen(REQUEST) + 1);
+
+	return 0;
+}
+
 static void https_get_task(void *pvParameters)
 {
     char buf[512];
@@ -93,7 +115,7 @@ static void https_get_task(void *pvParameters)
         esp_tls_cfg_t cfg = {
             .cacert_buf  = ca_cert_pem_start,
             .cacert_bytes = ca_cert_pem_end - ca_cert_pem_start,
-	     	.skip_common_name = true,/*If it is false then Commmon Name should be the same as WEB_SERVER*/
+	     	.skip_common_name = true,/*If it is false then Commmon Name should be the same as CONFIG_OTA_WEB_SERVER*/
         };
 
         struct esp_tls *tls = esp_tls_conn_http_new(WEB_URL, &cfg);
