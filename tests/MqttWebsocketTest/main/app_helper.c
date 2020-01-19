@@ -134,7 +134,8 @@ static const char* TAG = "app_helper";
 void test_flash_init() {
 
 	nvs_sec_cfg_t nvs_sec_cfg;
-	esp_partition_iterator_t iter = esp_partition_find(ESP_PARTITION_TYPE_DATA, ESP_PARTITION_SUBTYPE_DATA_PHY, "phy_init");
+	esp_partition_iterator_t iter = esp_partition_find(ESP_PARTITION_TYPE_DATA, ESP_PARTITION_SUBTYPE_DATA_NVS_KEYS, "nvs_key");
+
 
 	esp_err_t rc = nvs_flash_read_security_cfg(esp_partition_get(iter), &nvs_sec_cfg);
 

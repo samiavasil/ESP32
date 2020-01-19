@@ -5,6 +5,8 @@ Creation-Date: 2019-12-26T21:20:44+02:00
 ====== ESP32 NVS storage ======
 Created четвъртък 26 декември 2019
 
+
+
 === 1 Non encrypted access: ===
 
 {{{code: lang="c" linenumbers="True"
@@ -126,21 +128,23 @@ python nvs_partition_gen.py  encrypt ./nvs_partition_test.csv nvs_partition_test
 }}}
 
 
+[[https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/partition-tables.html|Partition Tables]]
+
 2 Flash on keys on board in partition "phy_init"
 {{{code: lang="sh" linenumbers="True"
-# For keys storage I use partition: -  phy_init, data, phy,     0xf000,  0x1000,
-esptool.py -p /dev/ttyUSB0 -b 460800 read_flash 0xf000 0x1000 phy_init_backup.bin
-esptool.py erase_region 0xf000 0x1000
-esptool.py --port /dev/ttyUSB0 write_flash 0xf000 keys/nvs_partition_keys.bin
+# For keys storage I use partition: -  nvs_key, data, nvs_keys, 0x210000,  0x1000,
+esptool.py erase_region 0x210000 0x1000
+esptool.py --port /dev/ttyUSB0 write_flash 0x210000 keys/nvs_partition_keys.bin
 
 #Write NVS partition
-esptool.py erase_region 0x9000 0x6000
-esptool.py --port /dev/ttyUSB0 write_flash 0x9000 keys/nvs_partition_keys.bin
+esptool.py erase_region 0x9000 0x4000
+esptool.py --port /dev/ttyUSB0 write_flash 0x9000 nvs_partition_test_encr.bin
 }}}
 
 
 3 Reset and check that what is prepared is available on NVS
-4 Check that the NVS keys are correct as generated with PC tools.
+4 Check that the NVS keys are correct as generated with PC tools with call :
+nvs_dump_partition("nvs", "test_nvs");
 
 
 

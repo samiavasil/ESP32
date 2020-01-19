@@ -1,5 +1,8 @@
 .cproject
 .project
 .settings
-sdkconfig
+sdkconfig*
+Download*
+node_modules*
+www_data*
 
