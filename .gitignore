@@ -1,5 +1,2 @@
-.cproject
-.project
-.settings
-sdkconfig
+/build
 
