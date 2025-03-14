@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ESP-RFID Access Control</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Sidebar -->
+    <div id="sidebar" class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <span class="sidebar-title">ESP-RFID</span>
+        </div>
+        <button id="toggle-sidebar" class="sidebar-toggle">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </div>
+      <nav class="sidebar-nav">
+        <ul>
+          <li>
+            <a href="#" class="nav-link active" data-tab="overview">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+              <span>Dashboard</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="nav-link" data-tab="users">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              <span>Users</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="nav-link" data-tab="access">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+              <span>Access Control</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="nav-link" data-tab="logs">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              <span>Logs</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="nav-link" data-tab="settings">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+              <span>Settings</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <div class="sidebar-footer">
+        <button class="logout-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          <span>Logout</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <!-- Header -->
+      <header class="header">
+        <h1 id="page-title">Dashboard</h1>
+        <div class="header-actions">
+          <div class="notification">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            <span class="badge">3</span>
+          </div>
+          <div class="user-profile">
+            <div class="avatar">A</div>
+            <span>Admin</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Tab Navigation -->
+      <div class="tab-navigation">
+        <button class="tab-btn active" data-tab="overview">Overview</button>
+        <button class="tab-btn" data-tab="users">Users</button>
+        <button class="tab-btn" data-tab="logs">Access Logs</button>
+        <button class="tab-btn" data-tab="settings">Settings</button>
+      </div>
+
+      <!-- Tab Content -->
+      <div class="tab-content">
+        <!-- Overview Tab -->
+        <div id="overview" class="tab-pane active">
+          <div class="card-grid">
+            <div class="card small-card">
+              <div class="card-header">
+                <h3>Total Users</h3>
+              </div>
+              <div class="card-body">
+                <div class="stat-value">24</div>
+                <p class="stat-desc">+2 from last week</p>
+              </div>
+            </div>
+            <div class="card small-card">
+              <div class="card-header">
+                <h3>Access Events Today</h3>
+              </div>
+              <div class="card-body">
+                <div class="stat-value">18</div>
+                <p class="stat-desc">12 granted, 6 denied</p>
+              </div>
+            </div>
+            <div class="card small-card">
+              <div class="card-header">
+                <h3>System Status</h3>
+              </div>
+              <div class="card-body">
+                <div class="status-indicator">
+                  <div class="status-dot online"></div>
+                  <span>Online</span>
+                </div>
+                <p class="stat-desc">Last restart: 3 days ago</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h2>Recent Activity</h2>
+              <p>Latest access events in the system</p>
+            </div>
+            <div class="card-body">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Time</th>
+                    <th>User</th>
+                    <th>Card ID</th>
+                    <th>Access Point</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>10:23:45</td>
+                    <td>John Doe</td>
+                    <td>A4:C2:08:15</td>
+                    <td>Main Door</td>
+                    <td><span class="badge success">Granted</span></td>
+                  </tr>
+                  <tr>
+                    <td>10:15:32</td>
+                    <td>Jane Smith</td>
+                    <td>B1:D3:45:67</td>
+                    <td>Office</td>
+                    <td><span class="badge success">Granted</span></td>
+                  </tr>
+                  <tr>
+                    <td>09:58:21</td>
+                    <td>Unknown</td>
+                    <td>F5:E2:19:33</td>
+                    <td>Main Door</td>
+                    <td><span class="badge danger">Denied</span></td>
+                  </tr>
+                  <tr>
+                    <td>09:45:12</td>
+                    <td>Mike Johnson</td>
+                    <td>C3:A1:87:22</td>
+                    <td>Server Room</td>
+                    <td><span class="badge success">Granted</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="card-footer">
+              <button class="btn btn-outline">View All Logs</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h2>System Resources</h2>
+              <p>Current system resource usage</p>
+            </div>
+            <div class="card-body">
+              <div class="progress-item">
+                <div class="progress-header">
+                  <span>Memory Usage</span>
+                  <span>68%</span>
+                </div>
+                <div class="progress-bar">
+                  <div class="progress-fill" style="width: 68%"></div>
+                </div>
+              </div>
+              <div class="progress-item">
+                <div class="progress-header">
+                  <span>CPU Usage</span>
+                  <span>42%</span>
+                </div>
+                <div class="progress-bar">
+                  <div class="progress-fill" style="width: 42%"></div>
+                </div>
+              </div>
+              <div class="progress-item">
+                <div class="progress-header">
+                  <span>Storage</span>
+                  <span>23%</span>
+                </div>
+                <div class="progress-bar">
+                  <div class="progress-fill" style="width: 23%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Users Tab -->
+        <div id="users" class="tab-pane">
+          <div class="card">
+            <div class="card-header card-header-actions">
+              <div>
+                <h2>User Management</h2>
+                <p>Manage users and their RFID cards</p>
+              </div>
+              <button class="btn btn-primary">Add User</button>
+            </div>
+            <div class="card-body">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Card ID</th>
+                    <th>Access Level</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>John Doe</td>
+                    <td>A4:C2:08:15</td>
+                    <td>Administrator</td>
+                    <td><span class="badge success">Active</span></td>
+                    <td>
+                      <div class="action-buttons">
+                        <button class="btn btn-sm btn-outline">Edit</button>
+                        <button class="btn btn-sm btn-danger">Delete</button>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Jane Smith</td>
+                    <td>B1:D3:45:67</td>
+                    <td>User</td>
+                    <td><span class="badge success">Active</span></td>
+                    <td>
+                      <div class="action-buttons">
+                        <button class="btn btn-sm btn-outline">Edit</button>
+                        <button class="btn btn-sm btn-danger">Delete</button>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Mike Johnson</td>
+                    <td>C3:A1:87:22</td>
+                    <td>User</td>
+                    <td><span class="badge success">Active</span></td>
+                    <td>
+                      <div class="action-buttons">
+                        <button class="btn btn-sm btn-outline">Edit</button>
+                        <button class="btn btn-sm btn-danger">Delete</button>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Sarah Williams</td>
+                    <td>D7:F9:23:11</td>
+                    <td>User</td>
+                    <td><span class="badge warning">Suspended</span></td>
+                    <td>
+                      <div class="action-buttons">
+                        <button class="btn btn-sm btn-outline">Edit</button>
+                        <button class="btn btn-sm btn-danger">Delete</button>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="card-footer pagination">
+              <button class="btn btn-outline">Previous</button>
+              <button class="btn btn-outline">Next</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Logs Tab -->
+        <div id="logs" class="tab-pane">
+          <div class="card">
+            <div class="card-header">
+              <h2>Access Logs</h2>
+              <p>Complete history of access attempts</p>
+            </div>
+            <div class="card-body">
+              <div class="filter-controls">
+                <input type="text" placeholder="Search logs..." class="search-input">
+                <button class="btn btn-outline">Filter</button>
+                <button class="btn btn-outline">Export</button>
+              </div>
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>User</th>
+                    <th>Card ID</th>
+                    <th>Access Point</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>2023-05-15</td>
+                    <td>10:23:45</td>
+                    <td>John Doe</td>
+                    <td>A4:C2:08:15</td>
+                    <td>Main Door</td>
+                    <td><span class="badge success">Granted</span></td>
+                  </tr>
+                  <tr>
+                    <td>2023-05-15</td>
+                    <td>10:15:32</td>
+                    <td>Jane Smith</td>
+                    <td>B1:D3:45:67</td>
+                    <td>Office</td>
+                    <td><span class="badge success">Granted</span></td>
+                  </tr>
+                  <tr>
+                    <td>2023-05-15</td>
+                    <td>09:58:21</td>
+                    <td>Unknown</td>
+                    <td>F5:E2:19:33</td>
+                    <td>Main Door</td>
+                    <td><span class="badge danger">Denied</span></td>
+                  </tr>
+                  <tr>
+                    <td>2023-05-15</td>
+                    <td>09:45:12</td>
+                    <td>Mike Johnson</td>
+                    <td>C3:A1:87:22</td>
+                    <td>Server Room</td>
+                    <td><span class="badge success">Granted</span></td>
+                  </tr>
+                  <tr>
+                    <td>2023-05-14</td>
+                    <td>17:32:09</td>
+                    <td>Sarah Williams</td>
+                    <td>D7:F9:23:11</td>
+                    <td>Office</td>
+                    <td><span class="badge success">Granted</span></td>
+                  </tr>
+                  <tr>
+                    <td>2023-05-14</td>
+                    <td>16:45:33</td>
+                    <td>Unknown</td>
+                    <td>E8:B2:77:44</td>
+                    <td>Server Room</td>
+                    <td><span class="badge danger">Denied</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="card-footer pagination">
+              <div class="pagination-info">Showing 1-6 of 124 entries</div>
+              <div class="pagination-controls">
+                <button class="btn btn-outline">Previous</button>
+                <button class="btn btn-outline">Next</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Settings Tab -->
+        <div id="settings" class="tab-pane">
+          <div class="card">
+            <div class="card-header">
+              <h2>Network Settings</h2>
+              <p>Configure network parameters</p>
+            </div>
+            <div class="card-body">
+              <div class="settings-grid">
+                <div class="form-group">
+                  <label for="hostname">Hostname</label>
+                  <input type="text" id="hostname" value="esp-rfid-controller">
+                </div>
+                <div class="form-group">
+                  <label for="ip-mode">IP Configuration</label>
+                  <select id="ip-mode">
+                    <option>DHCP</option>
+                    <option>Static IP</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="ip-address">IP Address</label>
+                  <input type="text" id="ip-address" value="192.168.1.100" disabled>
+                </div>
+                <div class="form-group">
+                  <label for="subnet">Subnet Mask</label>
+                  <input type="text" id="subnet" value="255.255.255.0" disabled>
+                </div>
+                <div class="form-group">
+                  <label for="gateway">Gateway</label>
+                  <input type="text" id="gateway" value="192.168.1.1" disabled>
+                </div>
+                <div class="form-group">
+                  <label for="dns">DNS Server</label>
+                  <input type="text" id="dns" value="8.8.8.8" disabled>
+                </div>
+              </div>
+            </div>
+            <div class="card-footer">
+              <button class="btn btn-primary">Save Network Settings</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h2>RFID Settings</h2>
+              <p>Configure RFID reader parameters</p>
+            </div>
+            <div class="card-body">
+              <div class="settings-grid">
+                <div class="form-group">
+                  <label for="reader-type">Reader Type</label>
+                  <select id="reader-type">
+                    <option>MFRC522</option>
+                    <option>PN532</option>
+                    <option>RDM6300</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="wiegand-mode">Wiegand Mode</label>
+                  <select id="wiegand-mode">
+                    <option>26-bit</option>
+                    <option>34-bit</option>
+                    <option>Disabled</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="range-header">
+                  <label for="relay-time">Relay Activation Time (ms)</label>
+                  <span id="relay-time-value">300</span>
+                </div>
+                <input type="range" id="relay-time" min="100" max="5000" step="100" value="300">
+              </div>
+              <div class="form-group switch-group">
+                <label class="switch">
+                  <input type="checkbox" id="led-enabled" checked>
+                  <span class="slider"></span>
+                </label>
+                <label for="led-enabled">Enable Status LED</label>
+              </div>
+              <div class="form-group switch-group">
+                <label class="switch">
+                  <input type="checkbox" id="buzzer-enabled" checked>
+                  <span class="slider"></span>
+                </label>
+                <label for="buzzer-enabled">Enable Buzzer</label>
+              </div>
+            </div>
+            <div class="card-footer">
+              <button class="btn btn-primary">Save RFID Settings</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h2>System Maintenance</h2>
+              <p>System backup and firmware updates</p>
+            </div>
+            <div class="card-body">
+              <div class="maintenance-grid">
+                <div class="card inner-card">
+                  <div class="card-header">
+                    <h3>Backup & Restore</h3>
+                  </div>
+                  <div class="card-body">
+                    <button class="btn btn-outline full-width">Backup Configuration</button>
+                    <div class="file-upload">
+                      <input type="file" id="restore-file">
+                      <button class="btn">Restore</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="card inner-card">
+                  <div class="card-header">
+                    <h3>Firmware Update</h3>
+                  </div>
+                  <div class="card-body">
+                    <div class="version-info">Current Version: <span>v1.2.3</span></div>
+                    <div class="file-upload">
+                      <input type="file" id="firmware-file">
+                      <button class="btn">Update</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="maintenance-actions">
+                <button class="btn btn-outline full-width">Factory Reset</button>
+                <button class="btn btn-outline full-width">Restart Device</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+

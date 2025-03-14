@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESP32 Data Visualization</title>
+</head>
+<body>
+    <h1>ESP32 Data Visualization</h1>
+    <button onclick="startSendingData()">Start Sending Data</button>
+    <button onclick="stopSendingData()">Stop Sending Data</button>
+    <canvas id="dataCanvas" width="400" height="200"></canvas>
+
+    <script>
+        let socket = new WebSocket('ws://' + window.location.hostname + ':81');
+        let dataCanvas = document.getElementById('dataCanvas');
+        let ctx = dataCanvas.getContext('2d');
+        let dataPoints = [];
+        let sendData = false;
+
+        function startSendingData() {
+            sendData = true;
+            socket.send('start');
+        }
+
+        function stopSendingData() {
+            sendData = false;
+            socket.send('stop');
+        }
+
+        socket.onopen = function() {
+            console.log('WebSocket opened');
+        };
+
+        socket.onmessage = function(event) {
+            let message = event.data;
+            if (sendData) {
+                let data = parseFloat(message);
+                if (dataPoints.length > 20) dataPoints.shift();
+                dataPoints.push(data);
+                updateGraph();
+            }
+        };
+
+        function updateGraph() {
+            ctx.clearRect(0, 0, dataCanvas.width, dataCanvas.height);
+            ctx.beginPath();
+            for (let i = 0; i < dataPoints.length; i++) {
+                let x = i * 20;
+                let y = 100 + dataPoints[i];
+                ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+        }
+    </script>
+</body>
+</html>

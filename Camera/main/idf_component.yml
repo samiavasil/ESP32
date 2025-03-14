@@ -1,0 +1,5 @@
+
+dependencies:
+  joltwallet/littlefs: "==1.16.4"
+  espressif/esp32-camera: "*"
+  
