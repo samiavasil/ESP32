@@ -1,0 +1,7 @@
+menu "Wi-Fi Connector Manager"
+    config WIFI_CONNECTOR
+    bool "Enable WIFI connector."
+    help
+        This enables the BAR feature of the FOO component.
+endmenu
+
