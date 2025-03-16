@@ -4,7 +4,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-	<title>ESP32</title>
+	<title>Install esp-df</title>
     
 	<meta name="generator" content="Zim 0.65 & the Ecodiv-responsive template">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -32,12 +32,9 @@
                     <!-- <p style="padding-left:20px; margin-bottom:0px"><a href="http://yourURL.html">Home</a></p> -->
                     <p></p>
                     <ul>
-<li><a href="../index.html" title="index" class="page">index</a>
+<li><a href="../ESP32.html" title="ESP32" class="page">ESP32</a>
 <ul>
-<li><b>ESP32</b>
-<ul>
-<li><a href="./ESP32/Getting_Started_with_ESP-IDF.html" title="Getting Started with ESP-IDF" class="page">Getting Started with ESP-IDF</a></li>
-</ul></li>
+<li><b>Getting Started with ESP-IDF</b></li>
 </ul></li>
 </ul>
 
@@ -60,12 +57,33 @@
                 <!-- You may want to replace the image below (but you are welcome to use it if you like) -->
                 <img src="../_resources/header_1.png" width=100% alt="Header">
                 <br>
-                <h1>ESP32 <a name='index:ESP32'></a></h1>
+                <h1>Install esp-df <a name='ESP32:Getting Started with ESP-IDF'></a></h1>
                 
                 <p>
-Created сряда 06 ноември 2019
+This is corespond to the current latest version (a45e9985344575a80acb1dc9c12e7bec4d8af401). Follow steps coresspond to this version.
 </p>
+<div class="zim-object">
+<pre class="brush: sh;">
+1&nbsp;	mkdir -p xxx/ESP/esp-idf
+2&nbsp;	cd xxx/ESP/esp-idf
+3&nbsp;	git clone --recursive https://github.com/espressif/esp-idf.git
+4&nbsp;	cd esp-idf/
+5&nbsp;	./install.sh
+6&nbsp;	. xxx/esp-idf/export.sh
+7&nbsp;	cd yyy/
+8&nbsp;	cp cp -r xxx/esp-idf/examples/protocols/websocket/ ./
+9&nbsp;	idf.py menuconfig // Configure application
+10&nbsp;	idf.py build
+11&nbsp;	idf.py -p PORT [-b BAUD] flash
+12&nbsp;	idf.py -p /dev/ttyUSB0 monitor
+13&nbsp;	</pre>
+</div>
 
+<h2>Install Eclpise plugins</h2>
+
+<p>
+<a href="https://github.com/espressif/idf-eclipse-plugin/blob/master/README.md#GettingStarted" title="Espressif IDF Eclipse Plugins" class="https">Espressif IDF Eclipse Plugins</a>
+</p>
 
                 <br>
                 <span class="backlinks">
