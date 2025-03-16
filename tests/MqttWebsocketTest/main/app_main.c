@@ -35,14 +35,12 @@
 
 static const char *TAG = "MQTTWSS_EXAMPLE";
 
-
-
 #if CONFIG_BROKER_CERTIFICATE_OVERRIDDEN == 1
 static const uint8_t mqtt_eclipse_org_pem_start[]  = "-----BEGIN CERTIFICATE-----\n" CONFIG_BROKER_CERTIFICATE_OVERRIDE "\n-----END CERTIFICATE-----";
 #else
 extern const uint8_t mqtt_eclipse_org_pem_start[]   asm("_binary_mqtt_eclipse_org_pem_start");
-#endif
 extern const uint8_t mqtt_eclipse_org_pem_end[]   asm("_binary_mqtt_eclipse_org_pem_end");
+#endif
 
 static esp_err_t mqtt_event_handler_cb(esp_mqtt_event_handle_t event)
 {
