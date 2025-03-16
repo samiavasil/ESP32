@@ -8,6 +8,7 @@ cmake_minimum_required(VERSION 3.5)
 
 set(SUPPORTED_TARGETS esp32)
 include($ENV{IDF_PATH}/tools/cmake/project.cmake)
-project(mqtt_websocket_exteded)
+set(EXTRA_COMPONENT_DIRS ../../src/components/wifi_connection)
+project(mqtt_websocket_test)
 
-target_add_binary_data(mqtt_websocket_exteded.elf "main/mqtt_eclipse_org.pem" TEXT)
+target_add_binary_data(mqtt_websocket_test.elf "main/mqtt_eclipse_org.pem" TEXT)
