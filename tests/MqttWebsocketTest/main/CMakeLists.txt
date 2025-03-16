@@ -1,2 +1,4 @@
 idf_component_register(SRCS "app_main.c"
-                    INCLUDE_DIRS ".")
+						    "app_helper.c"
+					   INCLUDE_DIRS "."
+					   )
