@@ -14,6 +14,12 @@ Created вторник 03 декември 2019
 	* [[https://github.com/eclipse/paho.mqtt-spy|MQTT-Spy]]
 	* [[http://workswithweb.com/mqttbox.html|MQTTBox]]
 	
+If have an issue with installation of MQTT-spy  (described on this link [[https://github.com/kamilfb/mqtt-spy/issues/88|"Starting fails with "Could not find or load main class"]]) :
+{{{code: lang="sh" linenumbers="True"
+java --module-path /usr/share/openjfx/lib --add-modules javafx.base,javafx.controls,javafx.fxml -jar mqtt-spy-1.0.1-beta-b18-jar-with-dependencies.jar seems to work, though you might need to add even more JavaFX modules.
+}}}
+
+
 2. ESP32
 
 
@@ -57,6 +63,8 @@ The server listens on the following ports:
 
 Good but has an issue with bad RSA (short) keys in CA certificate. 
 Task: Check Alternatives as described here https://github.com/espressif/esp-idf/issues/2993
+Hm Hm Hm... 04.12.2019 -> service is OFF ??
+
 
 	iot.eclipse.org
 	cloudmqtt

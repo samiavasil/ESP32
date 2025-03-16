@@ -1,0 +1,20 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2019-12-12T14:57:51+02:00
+
+====== ESP32 Docummentation ======
+Created четвъртък 12 декември 2019
+
+[[./esp32_technical_reference_manual_en.pdf|esp32_technical_reference_manual_en.pdf]] 
+
+
+**Memory Capabilities**
+
+The ESP32 contains multiple types of RAM:
+	DRAM (Data RAM) is memory used to hold data. This is the most common kind of memory accessed as heap.
+	IRAM (Instruction RAM) usually holds executable data only. If accessed as generic memory, all accesses must be 32-bit aligned.
+	D/IRAM is RAM which can be used as either Instruction or Data RAM.
+	[[https://docs.espressif.com/projects/esp-idf/en/latest/api-reference/system/mem_alloc.html|Heap Memory Allocation]]
+	[[https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/general-notes.html#application-memory-layout|Application memory layout]]
+	[[./esp32_technical_reference_manual_en.pdf|Table 2: Embedded Memory Address Mapping]] 
+	
