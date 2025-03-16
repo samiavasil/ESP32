@@ -44,7 +44,7 @@ Note: Make sure you run this step even if you've already installed the required 
 
 ==== Create a new Project ====
 Make sure you are in C/C++ Perspective
-* Go to File > New > Espressif IDF Project (If you don't see this, please reset the perspective from Window > Perspective > Reset Perspective..)
-* Provide the Project name
-* Click Finish
+	* Go to File > New > Espressif IDF Project (If you don't see this, please reset the perspective from Window > Perspective > Reset Perspective..)
+	* Provide the Project name
+	* Click Finish
 
