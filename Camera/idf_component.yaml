@@ -1,0 +1,2 @@
+dependencies:
+  - url: "https://github.com/ ayakzhan/esp32-rtsp-server.git#master"
