@@ -1,0 +1,9 @@
+@startuml
+note as n
+	<b>Note:</b>
+
+        <i>In CMake terms, <b>REQUIRES & PRIV_REQUIRES</b> are approximate wrappers around the CMake functions target_link_libraries(... <b>PUBLIC</b> ...) and target_link_libraries(... <b>PRIVATE</b> ...).</i>
+end note
+
+ 
+@enduml

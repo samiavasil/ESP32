@@ -1,0 +1,491 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+	<title>Concepts</title>
+    
+	<meta name="generator" content="Zim 0.65 & the Ecodiv-responsive template">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans:300&subset=latin,greek,latin-ext' rel='stylesheet' type='text/css'>
+    <script type='text/javascript' src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.1.1.min.js"></script>
+    <script type='text/javascript' src="../../_resources/script.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="../../_resources/style.css" type="text/css">
+    <link rel="stylesheet" media="screen and (min-width: 1600px)" href="../../_resources/style1.css" type="text/css">
+    <link rel="stylesheet" media="screen and (max-width: 1600px) and (min-width:1000px)" href="../../_resources/style2.css" type="text/css">
+    <link rel="stylesheet" media="screen and (max-width: 999px) and (min-width:750px)" href="../../_resources/style3.css" type="text/css">
+    <link rel="stylesheet" media="screen and (max-width: 750px)" href="../../_resources/style4.css" type="text/css">      
+</head>
+<body>    
+	<div class="wrapper">
+ 
+    <!--Collapsable menu-->    
+        <div id="taskbar" style="color:#3D6E0F; font-weight:500;">
+            <div id="menuicon">
+                <a href="#" class="toggler" style="color:#CE5C00; text-decoration:none; line-height: 2em;"><img src="../../_resources/menu.png" height="19" alt="Menu"></a> 
+            </div>
+            <div id="list">
+                <div id="navigation">
+                    <!-- To add additional links above the navigation menu, replace the link below with your link and remove comment tags
+                    If you do, you may want to remove the extra line above the index -->
+                    <!-- <p style="padding-left:20px; margin-bottom:0px"><a href="http://yourURL.html">Home</a></p> -->
+                    <p></p>
+                    <ul>
+<li><a href="../../ESP32.html" title="ESP32" class="page">ESP32</a>
+<ul>
+<li><a href="../Prepare_ESP32-IDF_environment.html" title="Prepare ESP32-IDF environment" class="page">Prepare ESP32-IDF environment</a>
+<ul>
+<li><b>ESP-IDF create new project and components</b></li>
+</ul></li>
+</ul></li>
+</ul>
+
+                    <p></p>
+                    <!-- Warning message if java script is disabled -->
+                    <noscript>
+                        <div style="padding: 10px">
+                            <span style="color:#D48D8D"><p>Please note</p>
+                            <p>To hide the menu</p>
+                            <p>you need to enable</p>
+                            <p>Java script</p></span>
+                        </div>
+                    </noscript>
+                </div>
+            </div>
+        </div>
+        <div id="block">
+            <div id="content">
+            
+                <!-- You may want to replace the image below (but you are welcome to use it if you like) -->
+                <img src="../../_resources/header_1.png" width=100% alt="Header">
+                <br>
+                <h1>Concepts <a name='ESP32:Prepare ESP32-IDF environment:ESP-IDF create new project and components'></a></h1>
+                
+                <p>
+<ul style='padding-left: 30pt'>
+<li>A “project” is a directory that contains all the files and configuration to build a single “app” (executable), as well as additional supporting elements such as a partition table, data/filesystem partitions, and a bootloader.</li>
+<li>“Project configuration” is held in a single file called sdkconfig in the root directory of the project. This configuration file is modified via idf.py menuconfig to customise the configuration of the project. A single project contains exactly one project configuration.</li>
+<li>An “app” is an executable which is built by ESP-IDF. A single project will usually build two apps - a “project app” (the main executable, ie your custom firmware) and a “bootloader app” (the initial bootloader program which launches the project app).</li>
+<li>“components” are modular pieces of standalone code which are compiled into static libraries (.a files) and linked into an app. Some are provided by ESP-IDF itself, others may be sourced from other places.</li>
+<li>“Target” is the hardware for which an application is built. At the moment, ESP-IDF supports only one target, esp32.</li>
+</ul>
+</p>
+
+<p>
+Some things are not part of the project:<br>
+<ul style='padding-left: 30pt'>
+<li>“ESP-IDF” is not part of the project. Instead it is standalone, and linked to the project via the IDF_PATH environment variable which holds the path of the esp-idf directory. This allows the IDF framework to be decoupled from your project.</li>
+<li>The toolchain for compilation is not part of the project. The toolchain should be installed in the system command line PATH.</li>
+</ul>
+</p>
+
+<h2>Example Project</h2>
+
+<p>
+An example project directory tree might look like this:
+</p>
+
+<div class="zim-object">
+<pre class="brush: haddock;">
+1&nbsp;- myProject/
+2&nbsp;			 - CMakeLists.txt
+3&nbsp;			 - sdkconfig
+4&nbsp;			 - components/ - component1/ - CMakeLists.txt
+5&nbsp;										 - Kconfig
+6&nbsp;										 - src1.c
+7&nbsp;						   - component2/ - CMakeLists.txt
+8&nbsp;										 - Kconfig
+9&nbsp;										 - src1.c
+10&nbsp;										 - include/ - component2.h
+11&nbsp;			 - main/       - CMakeLists.txt
+12&nbsp;						   - src1.c
+13&nbsp;						   - src2.c
+14&nbsp;			 - build/</pre>
+</div>
+
+<p>
+This example “myProject” contains the following elements:
+</p>
+
+<p>
+<ul style='padding-left: 30pt'>
+<li>A top-level project <i>CMakeLists.txt</i> file. This is the primary file which CMake uses to learn how to build the project; and may set project-wide CMake variables. It includes the file /tools/cmake/project.cmake which implements the rest of the build system. Finally, it sets the project name and defines the project.</li>
+<li>“<i>sdkconfig</i>” project configuration file. This file is created/updated when idf.py menuconfig runs, and holds configuration for all of the components in the project (including ESP-IDF itself). The “<i>sdkconfig</i>” file may or may not be added to the source control system of the project.</li>
+<li>Optional “<i>components</i>” directory contains components that are part of the project. A project does not have to contain custom components of this kind, but it can be useful for structuring reusable code or including third party components that aren’t part of ESP-IDF. Alternatively, EXTRA_COMPONENT_DIRS can be set in the top-level <i>CMakeLists.txt</i> to look for components in other places. See the renaming mainsection for more info. If you have a lot of source files in the project, is recommended to group most into components instead of putting them all in “<i>main</i>”.</li>
+<li>“<i>main</i>” directory is a special component that contains source code for the project itself. “<i>main</i>” is a default name, the CMake variable <i>COMPONENT</i>_DIRS includes this component but you can modify this variable.</li>
+<li>“<i>build</i>” directory is where build output is created. This directory is created by idf.py if it doesn’t already exist. CMake configures the project and generates interim build files in this directory. Then, after the main build process is run, this directory will also contain interim object files and libraries as well as final binary output files. This directory is usually not added to source control or distributed with the project source code.</li>
+</ul>
+</p>
+
+<p>
+Component directories each contain a component <i>CMakeLists.txt</i> file. This file contains variable definitions to control the build process of the component, and its integration into the overall project. See Component <i>CMakeLists</i> Filesfor more details.<br>
+Each component may also include a <i>Kconfig</i> file defining the component configurationoptions that can be set via <i>menuconfig</i>. Some components may also include Kconfig.projbuild and project_include.cmake files, which are special files for overriding parts of the project.
+</p>
+
+<h2>Project CMakeLists File</h2>
+
+<p>
+Each project has a single top-level CMakeLists.txt file that contains build settings for the entire project. By default, the project CMakeLists can be quite minimal.
+</p>
+
+<h4>Minimal Example CMakeLists</h4>
+
+<p>
+<b>Minimal project:</b>
+</p>
+<div class="zim-object">
+<pre class="brush: makefile;">
+1&nbsp;cmake_minimum_required(VERSION 3.5)
+2&nbsp;include($ENV{IDF_PATH}/tools/cmake/project.cmake)
+3&nbsp;project(myProject)
+</pre>
+</div>
+
+<p>
+<b>Mandatory Parts</b><br>
+The inclusion of these three lines, in the order shown above, is necessary for every project:
+</p>
+
+<p>
+<ul>
+<li>cmake_minimum_required(VERSION 3.5) tells CMake the minimum version that is required to build the project. ESP-IDF is designed to work with CMake 3.5 or newer. This line must be the first line in the CMakeLists.txt file.</li>
+<li>include($ENV{IDF_PATH}/tools/cmake/project.cmake) pulls in the rest of the CMake functionality to configure the project, discover all the components, etc.</li>
+<li>project(myProject) creates the project itself, and specifies the project name. The project name is used for the final binary output files of the app - ie myProject.elf, myProject.bin. Only one project can be defined per CMakeLists file.</li>
+</ul>
+</p>
+
+<p>
+<b>Optional Project Variables</b><br>
+These variables all have default values that can be overridden for custom behaviour. Look in /tools/cmake/project.cmake for all of the implementation details.
+</p>
+
+<p>
+<ul style='padding-left: 30pt'>
+<li><b>COMPONENT_DIRS, COMPONENTS_DIRS</b>: Directories to search for components. Defaults to IDF_PATH/components, PROJECT_DIR/components, and <b>EXTRA_COMPONENT_DIRS</b>. Override this variable if you don’t want to search for components in these places.</li>
+<li><b>EXTRA_COMPONENT_DIRS, EXTRA_COMPONENTS_DIRS</b>: Optional list of additional directories to search for components. Paths can be relative to the project directory, or absolute.</li>
+<li><b>COMPONENTS</b>: A list of component names to build into the project. Defaults to all components found in the <b>COMPONENT_DIRS</b> directories. Use this variable to “trim down” the project for faster build times. Note that any component which “requires” another component via the REQUIRES or PRIV_REQUIRES arguments on component registration will automatically have it added to this list, so the COMPONENTS list can be very short.</li>
+</ul>
+</p>
+
+<p>
+Any paths in these variables can be absolute paths, or set relative to the project directory.<br>
+To set these variables, use the cmake set command ie set(VARIABLE "VALUE"). The set() commands should be placed after the cmake_minimum(...) line but before the include(...) line.
+</p>
+
+<p>
+<b>Renaming main component</b><br>
+The build system provides special treatment to the main component. It is a component that gets automatically added to the build provided that it is in the expected location, PROJECT_DIR/main. All other components in the build are also added as its dependencies, saving the user from hunting down dependencies and providing a build that works right out of the box. Renaming the main component causes the loss of these behind-the-scences heavy lifting, requiring the user to specify the location of the newly renamed component and manually specifying its dependencies. Specifically, the steps to renaming main are as follows:
+</p>
+
+<p>
+<ul style='padding-left: 30pt'>
+<li>Rename main directory.</li>
+<li>Set EXTRA_COMPONENT_DIRS in the project CMakeLists.txt to include the renamed main directory.</li>
+<li>Specify the dependencies in the renamed component’s CMakeLists.txt file via REQUIRES or PRIV_REQUIRES arguments on component registration.</li>
+</ul>
+</p>
+
+<h2>Component CMakeLists Files</h2>
+
+<p>
+Each project contains one or more components. Components can be part of ESP-IDF, part of the project’s own components directory, or added from custom component directories (see above).<br>
+A component is any directory in the <b>COMPONENT_DIRS</b> list which contains a CMakeLists.txt file.
+</p>
+
+<h3>Searching for Components</h3>
+
+<p>
+The list of directories in <b>COMPONENT_DIRS</b> is searched for the project’s components. Directories in this list can either be components themselves (ie they contain a CMakeLists.txt file), or they can be top-level directories whose sub-directories are components.
+</p>
+
+<p>
+When CMake runs to configure the project, it logs the components included in the build. This list can be useful for debugging the inclusion/exclusion of certain components.
+</p>
+
+<h3>Multiple components with the same name</h3>
+
+<p>
+When ESP-IDF is collecting all the components to compile, it will do this in the order specified by <b>COMPONENT_DIRS</b>; by default, this means ESP-IDF’s internal components first, then the project’s components, and finally any components set in <b>EXTRA_COMPONENT_DIRS</b>. If two or more of these directories contain component sub-directories with the same name, the component in the last place searched is used. This allows, for example, overriding ESP-IDF components with a modified version by copying that component from the ESP-IDF components directory to the project components directory and then modifying it there. If used in this way, the ESP-IDF directory itself can remain untouched.
+</p>
+
+<h3>Minimal Component CMakeLists</h3>
+
+<p>
+The minimal component CMakeLists.txt file simply registers the component to the build system using idf_component_register:
+</p>
+
+<div class="zim-object">
+<pre class="brush: makefile;">
+1&nbsp;idf_component_register(SRCS "foo.c" "bar.c"
+2&nbsp;					   INCLUDE_DIRS "include"
+3&nbsp;					   REQUIRES mbedtls)</pre>
+</div>
+
+<p>
+<ul style='padding-left: 30pt'>
+<li><b>SRCS</b> is a list of source files (*.c, *.cpp, *.cc, *.S). These source files will be compiled into the component library.</li>
+<li><b>INCLUDE_DIRS</b> is a list of directories to add to the global include search path for any component which requires this component, and also the main source files.</li>
+<li><b>REQUIRES</b> is not actually required, but it is very often required to declare what other components this component will use. See Component Requirements.</li>
+</ul>
+</p>
+
+<p>
+A library with the name of the component will be built and linked into the final app. Directories are usually specified relative to the <i>CMakeLists.txt</i> file itself, although they can be absolute.
+</p>
+
+<p>
+There are other arguments that can be passed to idf_component_register. These arguments are discussed here.
+</p>
+
+<p>
+See example component requirementsand example component CMakeListsfor more complete component CMakeLists.txt examples.
+</p>
+
+<h3>Preset Component Variables</h3>
+
+<p>
+The following component-specific variables are available for use inside component CMakeLists, but should not be modified:
+</p>
+
+<p>
+<ul>
+<li><b>COMPONENT_DIR:</b> The component directory. Evaluates to the absolute path of the directory containing CMakeLists.txt. The component path cannot contain spaces. This is the same as the <b>CMAKE_CURRENT_SOURCE_DIR</b> variable.</li>
+<li><b>COMPONENT_NAME</b>: Name of the component. Same as the name of the component directory.</li>
+<li><b>COMPONENT_ALIAS</b>: Alias of the library created internally by the build system for the component.</li>
+<li><b>COMPONENT_LIB:</b> Name of the library created internally by the build system for the component.</li>
+</ul>
+</p>
+
+<p>
+The following variables are set at the project level, but available for use in component CMakeLists:
+</p>
+
+<p>
+<ul>
+<li><b>CONFIG_</b>*: Each value in the project configuration has a corresponding variable available in cmake. All names begin with CONFIG_. More information here.</li>
+<li><b>ESP_PLATFORM</b>: Set to 1 when the CMake file is processed within ESP-IDF build system.</li>
+</ul>
+</p>
+
+<h3>Build/Project Variables</h3>
+
+<p>
+The following are some project/build variables that are available as build properties and whose values can be queried using idf_build_get_property from the component CMakeLists.txt:
+</p>
+
+<p>
+<ul style='padding-left: 30pt'>
+<li><b>PROJECT_NAME:</b> Name of the project, as set in project CMakeLists.txt file.</li>
+<li><b>PROJECT_DIR:</b> Absolute path of the project directory containing the project CMakeLists. Same as the CMAKE_SOURCE_DIR variable.</li>
+<li><b>COMPONENTS:</b> Names of all components that are included in this build, formatted as a semicolon-delimited CMake list.</li>
+<li><b>IDF_VER:</b> Git version of ESP-IDF (produced by git describe)</li>
+<li><b>IDF_VERSION_MAJOR, IDF_VERSION_MINOR, IDF_VERSION_PATCH:</b> Components of ESP-IDF version, to be used in conditional expressions. Note that this information is less precise than that provided by IDF_VER variable. v4.0-dev-*, v4.0-beta1, v4.0-rc1 and v4.0 will all have the same values of IDF_VERSION_* variables, but different IDF_VER values.</li>
+<li><b>IDF_TARGET:</b> Name of the target for which the project is being built.</li>
+<li><b>PROJECT_VER:</b> Project version.
+<ul>
+<li>If <b>PROJECT_VER</b> variable is set in project CMakeLists.txt file, its value will be used.</li>
+<li>Else, if the PROJECT_DIR/version.txt exists, its contents will be used as PROJECT_VER.</li>
+<li>Else, if the project is located inside a Git repository, the output of git describe will be used.</li>
+<li>Otherwise, <b>PROJECT_VER</b> will be “1”.</li>
+</ul></li>
+</ul>
+</p>
+
+<h3>Controlling Component Compilation</h3>
+
+<p>
+To pass compiler options when compiling source files belonging to a particular component, use the target_compile_options function:
+</p>
+
+<div class="zim-object">
+<pre class="brush: makefile;">
+1&nbsp;target_compile_options(${COMPONENT_LIB} PRIVATE -Wno-unused-variable)</pre>
+</div>
+
+<p>
+To apply the compilation flags to a single source file, use the CMake set_source_files_properties command:
+</p>
+
+<div class="zim-object">
+<pre class="brush: makefile;">
+1&nbsp;set_source_files_properties(mysrc.c
+2&nbsp;	PROPERTIES COMPILE_FLAGS
+3&nbsp;	-Wno-unused-variable
+4&nbsp;)</pre>
+</div>
+
+<p>
+This can be useful if there is upstream code that emits warnings.
+</p>
+
+<p>
+When using these commands, place them after the call to idf_component_register in the component CMakeLists file.
+</p>
+
+<h3>Component Configuration</h3>
+
+<p>
+Each component can also have a Kconfig file, alongside CMakeLists.txt. This contains configuration settings to add to the configuration menu for this component.
+</p>
+
+<p>
+These settings are found under the “Component Settings” menu when menuconfig is run.
+</p>
+
+<p>
+To create a component Kconfig file, it is easiest to start with one of the Kconfig files distributed with ESP-IDF.
+</p>
+
+<p>
+For an example<b>,  Adding conditional configuration:</b>
+</p>
+
+<p>
+The configuration system can be used to conditionally compile some files depending on the options selected in the project configuration.
+</p>
+
+<p>
+<b>Kconfig:</b>
+</p>
+<div class="zim-object">
+<pre class="brush: makefile;">
+1&nbsp;config FOO_ENABLE_BAR
+2&nbsp;	bool "Enable the BAR feature."
+3&nbsp;	help
+4&nbsp;		This enables the BAR feature of the FOO component.</pre>
+</div>
+
+<p>
+<b>CMakeLists.txt:</b>
+</p>
+<div class="zim-object">
+<pre class="brush: makefile;">
+1&nbsp; set(srcs "foo.c" "more_foo.c")
+2&nbsp;
+3&nbsp; if(CONFIG_FOO_ENABLE_BAR)
+4&nbsp;	 list(APPEND srcs "bar.c")
+5&nbsp; endif()
+6&nbsp;
+7&nbsp;idf_component_register(SRCS "${srcs}"    ...)</pre>
+</div>
+
+<p>
+This example makes use of the CMake if function and list APPEND function.
+</p>
+
+<p>
+This can also be used to select or stub out an implementation, as such:
+</p>
+
+<p>
+<b>Kconfig:</b>
+</p>
+<div class="zim-object">
+<pre class="brush: makefile;">
+1&nbsp;config ENABLE_LCD_OUTPUT
+2&nbsp;	bool "Enable LCD output."
+3&nbsp;	help
+4&nbsp;		Select this if your board has a LCD.
+5&nbsp;
+6&nbsp;config ENABLE_LCD_CONSOLE
+7&nbsp;	bool "Output console text to LCD"
+8&nbsp;	depends on ENABLE_LCD_OUTPUT
+9&nbsp;	help
+10&nbsp;		Select this to output debugging output to the lcd
+11&nbsp;
+12&nbsp;config ENABLE_LCD_PLOT
+13&nbsp;	bool "Output temperature plots to LCD"
+14&nbsp;	depends on ENABLE_LCD_OUTPUT
+15&nbsp;	help
+16&nbsp;		Select this to output temperature plots</pre>
+</div>
+
+<p>
+<b>CMakeLists.txt:</b>
+</p>
+<div class="zim-object">
+<pre class="brush: makefile;">
+1&nbsp;if(CONFIG_ENABLE_LCD_OUTPUT)
+2&nbsp;   set(srcs lcd-real.c lcd-spi.c)
+3&nbsp;else()
+4&nbsp;   set(srcs lcd-dummy.c)
+5&nbsp;endif()
+6&nbsp;
+7&nbsp;# We need font if either console or plot is enabled
+8&nbsp;if(CONFIG_ENABLE_LCD_CONSOLE OR CONFIG_ENABLE_LCD_PLOT)
+9&nbsp;   list(APPEND srcs "font.c")
+10&nbsp;endif()
+11&nbsp;
+12&nbsp;idf_component_register(SRCS "${srcs}"   ...)</pre>
+</div>
+
+<h3>Preprocessor Definitions</h3>
+
+<p>
+The ESP-IDF build system adds the following C preprocessor definitions on the command line:
+</p>
+
+<p>
+<ul style='padding-left: 30pt'>
+<li><b>ESP_PLATFORM :</b> Can be used to detect that build happens within ESP-IDF.</li>
+<li><b>IDF_VER :</b> Defined to a git version string. E.g. v2.0 for a tagged release or v1.0-275-g0efaa4f for an arbitrary commit.</li>
+</ul>
+</p>
+
+<h3>Component Requirements</h3>
+
+<p>
+When compiling each component, the ESP-IDF build system recursively evaluates its dependencies. This means each component needs to declare the components that it depends on (“requires”).
+</p>
+
+<h3>When writing a component</h3>
+
+<div class="zim-object">
+<pre class="brush: makefile;">
+1&nbsp;idf_component_register(...
+2&nbsp;					   REQUIRES mbedtls
+3&nbsp;					   PRIV_REQUIRES console spiffs)</pre>
+</div>
+
+<p>
+<ul>
+<li><b>REQUIRES</b> should be set to all components whose header files are #included from the public header files of this component.</li>
+<li><b>PRIV_REQUIRES</b> should be set to all components whose header files are #included from any source files in this component, unless already listed in REQUIRES. Also any component which is required to be linked in order for this component to function correctly.</li>
+<li>The values of REQUIRES and PRIV_REQUIRES should not depend on any configuration choices (CONFIG_xxx macros). This is because requirements are expanded before configuration is loaded. Other component variables (like include paths or source files) can depend on configuration choices.</li>
+<li>Not setting either or both REQUIRES variables is fine. If the component has no requirements except for the Common component requirementsneeded for RTOS, libc, etc.</li>
+</ul>
+</p>
+
+<p>
+If a components only supports some target chips (values of IDF_TARGET) then it can specify REQUIRED_IDF_TARGETS in the idf_component_register call to express these requirements. In this case the build system will generate an error if the component is included into the build, but does not support the selected target.
+</p>
+
+<p>
+<img src="./ESP-IDF_create_new_project_and_components/plantuml.png">
+</p>
+
+<p>
+<a href="https://docs.espressif.com/projects/esp-idf/en/latest/api-guides/build-system.html#build-system" title="For more details check ESP-IDF Buidl System page" class="https">For more details check ESP-IDF Buidl System page</a>
+</p>
+
+
+                <br>
+                <span class="backlinks">
+                </span>
+                
+                <!-- !! The script will center all images. If you prefer the default (images at left delete these three lines -->    
+                <script>
+                    $( "img" ).wrap( "<div class='imgcenter'></div>" );
+                </script>
+                
+                
+            
+                <div id='footer'>
+                    <p>Created with <a href='http://zim-wiki.org/'>Zim-wiki</a> & the <a href='https://github.com/ecodiv/Ecodiv-responsive'>Ecodiv-responsive template</a><p>
+                </div>
+            </div>
+        </div>
+	</div>
+</body>
+</html>
