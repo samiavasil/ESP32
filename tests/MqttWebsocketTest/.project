@@ -3,6 +3,7 @@
 	<name>MqttWebsocketTest</name>
 	<comment></comment>
 	<projects>
+		<project>esp-idf</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
