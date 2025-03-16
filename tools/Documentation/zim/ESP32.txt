@@ -3,6 +3,7 @@ Wiki-Format: zim 0.4
 Creation-Date: 2019-11-06T16:23:17+02:00
 
 ====== ESP32 ======
-Created сряда 06 ноември 2019
 
-[[https://www.espressif.com|Esp32 Home page]]
+===== Links and tutorials =====
+[[https://www.espressif.com|Espressif  Home page]]
+http://esp32.net/

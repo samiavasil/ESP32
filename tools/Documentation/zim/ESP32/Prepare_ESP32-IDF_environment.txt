@@ -1,0 +1,50 @@
+Content-Type: text/x-zim-wiki
+Wiki-Format: zim 0.4
+Creation-Date: 2019-11-06T16:23:09+02:00
+
+===== Install esp32-idf =====
+
+This is corespond to the latest version (11.11.2019 --> a45e9985344575a80acb1dc9c12e7bec4d8af401). Follow steps coresspond to this version.
+{{{code: lang="sh" linenumbers="True"
+mkdir -p xxx/ESP/
+cd xxx/ESP/
+git clone --recursive https://github.com/espressif/esp-idf.git
+cd esp-idf/
+./install.sh
+. xxx/ESP/esp-idf/export.sh
+cd yyy/
+cp cp -r xxx/esp-idf/examples/protocols/websocket/ ./
+idf.py menuconfig // Configure application
+idf.py build
+idf.py -p PORT [-b BAUD] flash
+idf.py -p /dev/ttyUSB0 monitor
+	
+}}}
+
+
+===== Install Eclpise plugins =====
+
+Full descriptions can be found here:  "[[https://github.com/espressif/idf-eclipse-plugin/blob/master/README.md#GettingStarted|Espressif IDF Eclipse Plugins"]]
+
+==== Installing IDF Plugins using update site url ====
+You can install the IDF Eclipse plugins into an existing Eclipse CDT installation using the update site url. You first need to add the release repository url as follows:
+Go to Help -> Install New Software
+Click Add…
+Enter Location of the repository https://dl.espressif.com/dl/idf-eclipse-plugin/updates/latest/
+Enter Name as Espressif IDF Plugins for Eclipse
+Click Ok
+Select Espressif IDF from the list and proceed with the installation
+
+==== Installing ESP-IDF Tools ====
+ESP-IDF requires some prerequisite tools to be installed so you can build firmware for the ESP32. The prerequisite tools include Python, Git, cross-compilers, menuconfig tool, CMake and Ninja build tools.
+For this getting started follow the instructions below.
+Navigate to Help > Espressif IDF Tools Manager > Install Tools
+Provide the ESP-IDF Directory path to get started with the installation. Check the Console for the installation details. Installation might take a while if you're doing it for the first time since it has to download and install xtensa-esp32-elf, esp32ulp-elf, cmake, openocd-esp32 and ninja tools.
+Note: Make sure you run this step even if you've already installed the required tools, since it sets the IDF_PATH,PATH,OPENOCD_SCRIPTS and IDF_PYTHON_ENV_PATH based on the idf_tools.py export command.
+
+==== Create a new Project ====
+Make sure you are in C/C++ Perspective
+* Go to File > New > Espressif IDF Project (If you don't see this, please reset the perspective from Window > Perspective > Reset Perspective..)
+* Provide the Project name
+* Click Finish
+
